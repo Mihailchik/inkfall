@@ -448,9 +448,9 @@ function takeSnap(){const{w,h}=snapWant;snapWant=null;
  const sa=canvas.width/canvas.height,ta=w/h;let sw,sh;if(sa>ta){sh=canvas.height;sw=sh*ta}else{sw=canvas.width;sh=sw/ta}
  cx.drawImage(canvas,(canvas.width-sw)/2,(canvas.height-sh)/2,sw,sh,0,0,w,h);
  recorder=null;dyeCap=targetDetail();resize();
- out.toBlob(async b=>{const name=`tush-i-voda-${w}x${h}.png`;let dl=null;
-  try{if(window.claude&&claude.use)dl=await claude.use('downloads')}catch(e){}
-  try{if(dl)await dl.save({filename:name,data:b});else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}}catch(e){}
+ out.toBlob(b=>{const name=`tush-i-voda-${w}x${h}.png`,u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),4000);
   $('pSnap').textContent='снимок PNG'},'image/png')}
 $('pGo').onclick=()=>{if(recorder&&recorder!==true){recorder.stop();return}if(!canRec||!avail.length)return;
  const dur=+$('pDur').value*1000,opt=$('pFmt').selectedOptions[0],mime=opt.dataset.mime,ext=opt.value;
@@ -462,10 +462,10 @@ $('pGo').onclick=()=>{if(recorder&&recorder!==true){recorder.stop();return}if(!c
  if(on&&ac){const dst=ac.createMediaStreamDestination();master.connect(dst);dst.stream.getAudioTracks().forEach(t=>stream.addTrack(t))}
  const chunks=[];recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:Math.round(w*h*6)});
  recorder.ondataavailable=e=>chunks.push(e.data);
- recorder.onstop=async()=>{const blob=new Blob(chunks,{type:mime}),name=`tush-i-voda-${w}x${h}.${ext}`;
-  recorder=null;recCanvas=null;dyeCap=targetDetail();resize();$('pGo').textContent='сохраняю…';clearTimeout($('pGo')._t);
-  let dl=null;try{if(window.claude&&claude.use)dl=await claude.use('downloads')}catch(e){}
-  try{if(dl)await dl.save({filename:name,data:blob});else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click()}}catch(e){}
+ recorder.onstop=()=>{const blob=new Blob(chunks,{type:mime}),name=`tush-i-voda-${w}x${h}.${ext}`;
+  recorder=null;recCanvas=null;dyeCap=targetDetail();resize();clearTimeout($('pGo')._t);
+  const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),8000);
   $('pGo').textContent='начать запись';$('pGo').classList.remove('busy')};
  recorder.start(250);const t0=performance.now();panel.hidden=true;$('gear').classList.remove('open');
  const tick=()=>{if(!recorder||recorder===true)return;const left=Math.max(0,Math.ceil((dur-(performance.now()-t0))/1000));$('pGo').textContent=`запись ${left} с · стоп`;if(left>0)$('pGo')._t=setTimeout(tick,250);else recorder.stop()};tick()};
