@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-// Подставляет боевой домен в мета-теги и собирает sitemap.xml.
-//   node set-domain.mjs https://ваш-домен
+// Fills in canonical URLs, og:image and a sitemap once a domain exists.
+//   node set-domain.mjs https://your-domain
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const domain = (process.argv[2] || '').replace(/\/+$/, '');
 if (!/^https?:\/\/[^/]+$/.test(domain)) {
-  console.error('Использование: node set-domain.mjs https://ваш-домен');
+  console.error('Usage: node set-domain.mjs https://your-domain');
   process.exit(1);
 }
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
-const pages = ['index.html', 'tush-i-voda.html', 'yantarnaya-tumannost.html'];
+const pages = ['index.html'];
 const ogImage = '/og.jpg';
 
 for (const file of pages) {
@@ -33,7 +33,7 @@ for (const file of pages) {
     `\n<meta name="twitter:image" content="${domain}${ogImage}">`;
   s = s.replace('<meta property="og:type" content="website">', '<meta property="og:type" content="website">' + block);
   fs.writeFileSync(full, s);
-  console.log('обновлено', file);
+  console.log('updated', file);
 }
 
 const today = new Date().toISOString().slice(0, 10);
@@ -48,4 +48,4 @@ fs.writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 );
 fs.writeFileSync(path.join(dir, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${domain}/sitemap.xml\n`);
-console.log('sitemap.xml и robots.txt готовы');
+console.log('sitemap.xml and robots.txt written');

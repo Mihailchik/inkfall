@@ -1,156 +1,609 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Вода и свет</title>
-<meta name="description" content="Три интерактивные сцены, которые считаются прямо в браузере: гидродинамика туши и тёплая туманность.">
-<meta name="theme-color" content="#0b0910">
+<title>Ink and Water</title>
+<meta name="description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<meta name="theme-color" content="#0d0b10">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index,follow">
-<meta name="keywords" content="интерактивная графика, генеративное искусство, webgl, симуляция жидкости, тушь в воде, медитативная сцена, визуализация, generative art, fluid simulation, webgl experiment, relaxing visuals, ambient art">
-<meta property="og:site_name" content="Вода и свет">
-<meta property="og:locale" content="ru_RU">
-<meta name="twitter:title" content="Вода и свет">
-<meta name="twitter:description" content="Три интерактивные сцены, которые считаются прямо в браузере: гидродинамика туши и тёплая туманность.">
+<meta name="keywords" content="fluid simulation, ink in water, webgl, webgl2, generative art, creative coding, navier stokes, interactive art, shader, relaxing visuals, ambient, browser experiment">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ink and Water">
+<meta property="og:title" content="Ink and Water">
+<meta property="og:description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ink and Water">
+<meta name="twitter:description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23f2b95a'/%3E%3Cstop offset='1' stop-color='%23ff5a3c'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='%230d0b10'/%3E%3Ccircle cx='16' cy='16' r='9' fill='url(%23g)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23f2b95a'/%3E%3Cstop offset='1' stop-color='%23c46bff'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='%230b0910'/%3E%3Ccircle cx='16' cy='16' r='9' fill='url(%23g)'/%3E%3C/svg%3E">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Вода и свет">
-<meta property="og:description" content="Три интерактивные сцены, которые считаются прямо в браузере.">
-<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400&display=swap">
 <style>
-:root{
- --bg:#0b0910;--panel:#12101a;--ink:#efe6da;--mute:#8d8798;--line:rgba(239,230,218,.14);
- --amber:#f2b95a;--violet:#c46bff;--ember:#ff5a45;
-}
-*{box-sizing:border-box}
-html{background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.6 'Jost',system-ui,sans-serif;
- -webkit-font-smoothing:antialiased;min-height:100%}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
- background:radial-gradient(70% 55% at 18% 0%,rgba(242,185,90,.10),transparent 70%),
-            radial-gradient(60% 50% at 88% 12%,rgba(196,107,255,.09),transparent 72%)}
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:72px 28px 88px}
-header{max-width:36ch}
-h1{font:400 clamp(38px,6vw,60px)/1.04 'Marcellus',Georgia,serif;margin:0;letter-spacing:.01em;text-wrap:balance}
-.eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);margin:0 0 18px}
-.lede{margin:20px 0 0;color:var(--mute);font-size:17px;max-width:52ch}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:56px}
-.card{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;
- overflow:hidden;text-decoration:none;color:inherit;transition:border-color .35s,transform .35s}
-.card:hover,.card:focus-visible{border-color:var(--tone);transform:translateY(-3px);outline:none}
-.card figure{margin:0;aspect-ratio:16/10;background:#08060d;position:relative;overflow:hidden}
-.card svg{position:absolute;inset:0;width:100%;height:100%}
-.card .body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
-.kind{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--tone)}
-.card h2{font:400 23px/1.15 'Marcellus',Georgia,serif;margin:0}
-.card p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.55}
-.facts{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
-.facts li{font-size:11px;letter-spacing:.06em;color:var(--mute);border:1px solid var(--line);
- border-radius:999px;padding:4px 10px}
-.open{margin-top:auto;padding-top:14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--tone)}
-footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;max-width:62ch}
-footer p{margin:0 0 10px}
-footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
-footer a:hover{border-color:var(--ink)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:root{--bg:#0d0b10;--ink:#efe6da;--mute:rgba(239,230,218,.5);--gold:#f2b95a;--line:rgba(239,230,218,.18)}
+html,body{height:100%;margin:0;background:var(--bg);overflow:hidden}
+body{color:var(--ink);font:300 14px/1.5 'Jost',system-ui,sans-serif;cursor:crosshair}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+.ui{position:fixed;z-index:2;user-select:none;transition:opacity 1.6s}
+body.idle .ui.fade{opacity:.12}
+.name{left:28px;top:24px;font:400 26px/1 'Marcellus',Georgia,serif;letter-spacing:.06em}
+.name .sub{display:block;font:300 11px/1.6 'Jost',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+.hint{left:28px;bottom:24px;color:var(--mute);letter-spacing:.05em;max-width:52ch;transition:opacity 1.2s}
+.hint.gone{opacity:0}
+.toast{left:28px;bottom:24px;color:var(--ink);letter-spacing:.2em;text-transform:uppercase;font-size:11px;opacity:0;transition:opacity .4s}
+.toast.on{opacity:1}
+#gear{right:22px;bottom:20px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(13,11,16,.35);color:var(--mute);cursor:pointer;backdrop-filter:blur(6px);display:grid;place-items:center;padding:0;transition:color .3s,border-color .3s,opacity 1.6s}
+#gear:hover,#gear:focus-visible,#gear.open{color:var(--ink);border-color:var(--ink);outline:none;opacity:1}
+#gear i{width:4px;height:4px;border-radius:50%;background:currentColor;box-shadow:-7px 0 0 currentColor,7px 0 0 currentColor}
+.panel{right:22px;bottom:64px;width:290px;max-height:min(78vh,720px);overflow-y:auto;background:rgba(13,11,16,.78);border:1px solid var(--line);border-radius:12px;padding:6px 18px 16px;backdrop-filter:blur(12px);cursor:default;scrollbar-width:thin}
+.panel h3{font:300 10px/1 'Jost',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--mute);margin:16px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+.panel h3:first-child{border-top:0;padding-top:8px}
+.panel label{display:grid;grid-template-columns:1fr 2fr;align-items:center;gap:10px;font-size:12px;color:var(--mute);margin:6px 0}
+.panel select,.panel input[type=color]{font:300 12px/1.3 'Jost',sans-serif;color:var(--ink);background:rgba(239,230,218,.06);border:1px solid var(--line);border-radius:6px;padding:5px 7px;outline:none;width:100%;box-sizing:border-box}
+.panel input[type=color]{height:28px;padding:2px 4px;cursor:pointer}
+.panel select:focus-visible{border-color:var(--gold)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line);outline:none;border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--ink);border:0}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--ink);border:0}
+.inks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+.inks button{width:18px;height:18px;border-radius:50%;border:1px solid rgba(239,230,218,.25);padding:0;cursor:pointer;background:var(--c);box-shadow:0 0 12px color-mix(in srgb,var(--c) 45%,transparent);transition:transform .25s,border-color .25s}
+.inks button:hover,.inks button:focus-visible{transform:scale(1.25);outline:none}
+.inks button.cur{border-color:var(--ink);transform:scale(1.25)}
+.inks .auto{width:auto;height:auto;border-radius:999px;font:300 10px/1 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);padding:6px 10px;box-shadow:none;background:linear-gradient(90deg,var(--c),transparent 130%)}
+.inks .auto.cur{transform:none;border-color:var(--ink)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btns button,.panel .go{font:300 10px/1 'Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 11px;cursor:pointer;transition:color .3s,border-color .3s}
+.btns button:hover,.btns button:focus-visible,.panel .go:hover{color:var(--ink);border-color:var(--ink);outline:none}
+.btns button.on{color:var(--gold);border-color:var(--gold)}
+.btns button.busy{color:#ff7a6a;border-color:#ff7a6a}
+.panel .go{color:var(--gold);border-color:var(--gold);width:100%;margin-top:8px}
+.panel p{margin:6px 0 0;font-size:11px;line-height:1.4;color:var(--mute)}
+.back{left:28px;top:86px;font:300 11px/1 'Jost',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);text-decoration:none;transition:color .3s,opacity 1.6s}
+.back:hover,.back:focus-visible{color:var(--ink);outline:none}
+#inkdot{display:none;right:22px;bottom:62px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--c,#f2b95a);cursor:pointer;padding:0;box-shadow:0 0 14px color-mix(in srgb,var(--c,#f2b95a) 45%,transparent)}
+@media (pointer:coarse){#inkdot{display:block}.panel{bottom:106px}}
+.invite{left:28px;bottom:24px;font:300 12px/1 'Jost',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--ink);background:rgba(13,11,16,.5);border:1px solid var(--gold);border-radius:999px;padding:11px 16px;
+ cursor:pointer;backdrop-filter:blur(8px);opacity:0;transition:opacity 1.2s,background .3s,color .3s}
+.invite.on{opacity:1}
+.invite:hover,.invite:focus-visible{background:var(--gold);color:#14100a;outline:none}
+.bare .ui{display:none!important}
+.err{position:fixed;inset:0;display:none;place-items:center;text-align:center;color:var(--mute);padding:40px}
+@media (max-width:600px){.name{font-size:20px}.hint{display:none}.panel{width:calc(100vw - 44px)}}
 </style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Ink and Water","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture."}
+</script>
 <script>
-// Аналитика Vercel: только просмотры страниц, без куки и личных данных.
-// На localhost и при открытии файла с диска не грузится.
 if(location.protocol.startsWith('http')&&!/^(localhost|127\.|\[::1\])/.test(location.hostname)){
   var a=document.createElement('script');a.defer=true;a.src='/_vercel/insights/script.js';document.head.appendChild(a);
 }
 </script>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"Вода и свет","inLanguage":"ru",
-"description":"Три интерактивные сцены, которые считаются прямо в браузере: гидродинамика туши и тёплая туманность.",
-"hasPart":[
-{"@type":"WebApplication","name":"Тушь и вода","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Симуляция жидкости на видеокарте: тушь расплывается по воде за курсором."},
-{"@type":"WebApplication","name":"Янтарная туманность","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Процедурная туманность, которая закручивается за курсором."}
-]}
-</script>
 </head>
+
+<script>
+const DICT={
+en:{
+ name:"Ink and Water", tagline:"slow fluid dynamics",
+ hint:"Move the pointer to release ink. Click to drop a bead, right-click to change colour. Leave it alone and the brush takes over. Settings are in the bottom right corner.",
+ invite:"♪ turn on the water", colorTitle:"change colour", gearTitle:"settings",
+ h_language:"Language", l_language:"Interface",
+ h_character:"Character", l_ink:"Ink",
+ o_tush:"ink", o_silk:"silk", o_smoke:"smoke", o_oil:"oil", o_water:"watercolour", o_dust:"pollen", o_custom:"custom",
+ h_brush:"Brush", l_custom:"Own colour", l_speed:"Speed", l_amount:"Density",
+ h_particles:"Particles", l_detail:"Detail",
+ o_auto:"auto", o_soft:"soft", o_medium:"medium", o_fine:"fine", o_finest:"finest",
+ l_thickness:"Thickness", l_fiber:"Fibres", l_sharp:"Sharpness",
+ h_water:"Water", l_gravity:"Weight", l_curl:"Vorticity", l_spread:"Spread",
+ h_autopilot:"Autopilot", l_autobrush:"Brush itself",
+ o_idle:"when the pointer rests", o_always:"always", o_never:"never",
+ l_autodrops:"Drops on their own", o_yes:"yes", o_no:"no",
+ h_sound:"Sound", snd_off:"sound off", snd_on:"sound on",
+ mic:"microphone", mic_on:"microphone on", sys:"system audio", sys_on:"system audio on",
+ l_volume:"Volume", l_sens:"Sensitivity",
+ h_scene:"Scene", b_clear:"clear", b_fs:"fullscreen",
+ h_record:"Capture", l_size:"Frame size", o_win:"as window", l_length:"Length",
+ sec10:"10 seconds", sec20:"20 seconds", sec30:"30 seconds", sec60:"60 seconds", l_format:"Format",
+ b_snapshot:"PNG still", b_preparing:"preparing…", b_record:"start recording", b_recording:"recording %s s · stop",
+ keys:"Keys: S sound, C clear, F fullscreen, R record, Esc close.",
+ err:"This scene needs WebGL2 with float textures. Open it in a recent Chrome, Safari or Firefox.",
+ ink_gold:"gold", ink_coral:"coral", ink_rose:"rose", ink_plum:"plum", ink_sea:"sea", ink_ivory:"ivory", ink_own:"own", ink_auto:"auto",
+ t_sound_on:"sound on",
+ n_default:"With a microphone, low sounds drop fat beads and high ones scatter fine ripples.",
+ n_listening:"Listening. Clap, say something, or play music.",
+ n_off:"Microphone and system audio are off.",
+ n_asking:"Asking for permission…",
+ n_tickbox:"Tick “Share tab audio” in the picker.",
+ n_noaudio:"Audio sharing was not ticked. Try again and turn it on.",
+ n_denied:"Access denied. Allow it from the icon in the address bar and press again.",
+ n_file:"Browsers block devices for pages opened as files. Serve the page over http://localhost.",
+ n_nodevice:"No device found.", n_busy:"The device is busy in another app.",
+ n_insecure:"This address is not allowed to use devices. Open the page over https or http://localhost.",
+ n_failed:"That did not work.",
+ r_norec:"This browser cannot record from a canvas.",
+ r_mp4:"Video is captured with sound when sound is on.",
+ r_webm:"This browser writes WebM only. Open in Chrome for MP4."
+},
+ru:{
+ name:"Тушь и вода", tagline:"медленная гидродинамика",
+ hint:"Веди мышью, чтобы пустить тушь. Клик роняет каплю, правая кнопка меняет цвет. Оставь в покое, и кисть пойдёт сама. Настройки в правом нижнем углу.",
+ invite:"♪ включить звук воды", colorTitle:"сменить цвет", gearTitle:"настройки",
+ h_language:"Язык", l_language:"Интерфейс",
+ h_character:"Характер", l_ink:"Тушь",
+ o_tush:"тушь", o_silk:"шёлк", o_smoke:"дым", o_oil:"масло", o_water:"акварель", o_dust:"пыльца", o_custom:"своё",
+ h_brush:"Кисть", l_custom:"Свой цвет", l_speed:"Скорость", l_amount:"Густота",
+ h_particles:"Частицы", l_detail:"Детализация",
+ o_auto:"авто", o_soft:"мягко", o_medium:"средне", o_fine:"тонко", o_finest:"очень тонко",
+ l_thickness:"Толщина", l_fiber:"Волокна", l_sharp:"Резкость",
+ h_water:"Вода", l_gravity:"Тяжесть", l_curl:"Завихрения", l_spread:"Растекание",
+ h_autopilot:"Автопилот", l_autobrush:"Кисть сама",
+ o_idle:"когда мышь отдыхает", o_always:"всегда", o_never:"никогда",
+ l_autodrops:"Капли сами", o_yes:"да", o_no:"нет",
+ h_sound:"Звук", snd_off:"звук выкл", snd_on:"звук вкл",
+ mic:"микрофон", mic_on:"микрофон вкл", sys:"звук системы", sys_on:"звук системы вкл",
+ l_volume:"Громкость", l_sens:"Чуткость",
+ h_scene:"Сцена", b_clear:"очистить", b_fs:"во весь экран",
+ h_record:"Запись", l_size:"Размер кадра", o_win:"как окно", l_length:"Длина",
+ sec10:"10 секунд", sec20:"20 секунд", sec30:"30 секунд", sec60:"60 секунд", l_format:"Формат",
+ b_snapshot:"снимок PNG", b_preparing:"готовлю…", b_record:"начать запись", b_recording:"запись %s с · стоп",
+ keys:"Клавиши: S звук, C очистить, F весь экран, R запись, Esc закрыть.",
+ err:"Для этой сцены нужен WebGL2 с поддержкой float-текстур. Открой страницу в свежем Chrome, Safari или Firefox.",
+ ink_gold:"золото", ink_coral:"коралл", ink_rose:"роза", ink_plum:"слива", ink_sea:"морская", ink_ivory:"слоновая кость", ink_own:"свой", ink_auto:"авто",
+ t_sound_on:"звук включён",
+ n_default:"С микрофоном низкие звуки роняют крупные капли, высокие дают мелкую рябь.",
+ n_listening:"Слушаю. Хлопни, скажи что-нибудь или включи музыку.",
+ n_off:"Микрофон и звук системы выключены.",
+ n_asking:"Спрашиваю разрешение…",
+ n_tickbox:"В окне выбора отметь галочку «Поделиться звуком».",
+ n_noaudio:"Галочка звука не была включена. Нажми ещё раз и поставь её.",
+ n_denied:"Доступ запрещён. Разреши значком в адресной строке и нажми ещё раз.",
+ n_file:"Браузер не даёт устройства странице, открытой как файл. Открой её по http://localhost.",
+ n_nodevice:"Устройство не найдено.", n_busy:"Устройство занято другой программой.",
+ n_insecure:"На этом адресе устройства запрещены. Открой страницу по https или http://localhost.",
+ n_failed:"Не вышло.",
+ r_norec:"Этот браузер не умеет записывать с холста.",
+ r_mp4:"Видео пишется со звуком, если он включён.",
+ r_webm:"Этот браузер пишет только WebM. Для MP4 открой в Chrome."
+}};
+let LANG=(()=>{const p=new URLSearchParams(location.search).get('lang');
+ if(p==='ru'||p==='en')return p;
+ try{const s=localStorage.getItem('iw-lang');if(s==='ru'||s==='en')return s}catch(e){}
+ return (navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en'})();
+const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
+</script>
 <body>
-<div class="wrap">
-  <header>
-    <p class="eyebrow">две сцены · считаются в браузере</p>
-    <h1>Вода и свет</h1>
-    <p class="lede">Ничего не нужно устанавливать. Каждая сцена — одна страница, которая считает физику
-      на видеокарте и отвечает на движение курсора.</p>
-  </header>
-
-  <div class="grid">
-    <a class="card" href="tush-i-voda.html" style="--tone:var(--amber)">
-      <figure aria-hidden="true">
-        <svg viewBox="0 0 320 200">
-          <defs>
-            <radialGradient id="tg" cx="50%" cy="55%">
-              <stop offset="0" stop-color="#ffd9a0"/><stop offset=".45" stop-color="#f2913a"/>
-              <stop offset="1" stop-color="#7a1f10" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="tb"><feGaussianBlur stdDeviation="3.2"/></filter>
-          </defs>
-          <rect width="320" height="200" fill="#08060d"/>
-          <g filter="url(#tb)" fill="none" stroke="url(#tg)">
-            <path d="M40 150 C 90 150 88 96 128 92 C 168 88 176 130 214 122 C 250 114 246 66 286 62" stroke-width="15" opacity=".55"/>
-            <path d="M52 168 C 96 168 100 118 140 112 C 180 106 186 146 222 138" stroke-width="8" opacity=".7"/>
-            <path d="M96 60 C 128 44 156 62 168 84" stroke-width="6" opacity=".5"/>
-          </g>
-          <circle cx="128" cy="92" r="26" fill="url(#tg)" opacity=".55" filter="url(#tb)"/>
-        </svg>
-      </figure>
-      <div class="body">
-        <span class="kind">гидродинамика</span>
-        <h2>Тушь и вода</h2>
-        <p>Настоящая симуляция жидкости на видеокарте. Веди курсором, и тушь расплывается по воде струями и волокнами.</p>
-        <ul class="facts"><li>6 характеров туши</li><li>звук воды</li><li>запись MP4</li><li>микрофон</li></ul>
-        <span class="open">открыть →</span>
-      </div>
-    </a>
-
-    <a class="card" href="yantarnaya-tumannost.html" style="--tone:var(--violet)">
-      <figure aria-hidden="true">
-        <svg viewBox="0 0 320 200">
-          <defs>
-            <radialGradient id="ng" cx="46%" cy="52%">
-              <stop offset="0" stop-color="#fff0d2"/><stop offset=".3" stop-color="#f0973f"/>
-              <stop offset=".62" stop-color="#a13a86"/><stop offset="1" stop-color="#150a20" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="nb"><feGaussianBlur stdDeviation="7"/></filter>
-          </defs>
-          <rect width="320" height="200" fill="#08060d"/>
-          <ellipse cx="150" cy="104" rx="118" ry="76" fill="url(#ng)" filter="url(#nb)" opacity=".9"/>
-          <ellipse cx="216" cy="66" rx="46" ry="34" fill="url(#ng)" filter="url(#nb)" opacity=".5"/>
-          <g fill="#fff5e6">
-            <circle cx="58" cy="44" r="1.5" opacity=".9"/><circle cx="262" cy="52" r="1.2" opacity=".7"/>
-            <circle cx="92" cy="158" r="1.3" opacity=".8"/><circle cx="238" cy="150" r="1.6" opacity=".85"/>
-            <circle cx="180" cy="30" r="1.1" opacity=".6"/><circle cx="34" cy="112" r="1.2" opacity=".65"/>
-          </g>
-        </svg>
-      </figure>
-      <div class="body">
-        <span class="kind">шейдер</span>
-        <h2>Янтарная туманность</h2>
-        <p>Тёплый газ, посчитанный попиксельно. Курсор закручивает его в вихрь, клик зажигает звезду.</p>
-        <ul class="facts"><li>фрактальный шум</li><li>мягкие ноты</li><li>сама плывёт</li></ul>
-        <span class="open">открыть →</span>
-      </div>
-    </a>
-  </div>
-
-  <footer>
-    <p>Три страницы без единой зависимости и без сборки. Нужен браузер с поддержкой WebGL:
-      свежие Chrome, Safari, Firefox или Edge. «Тушь и вода» дополнительно требует WebGL2,
-      и сама скажет, если его нет.</p>
-    <p>Запись видео сохраняет MP4 в Chrome и WebM в остальных браузерах. Микрофон работает
-      только по адресу <code>https</code> или <code>localhost</code>, так что при открытии
-      файла с диска он будет недоступен.</p>
-  </footer>
+<canvas id="c"></canvas>
+<div class="ui name fade"><span class="ttl" data-i18n="name"></span><span class="sub" data-i18n="tagline"></span></div>
+<div class="ui hint" id="hint" data-i18n="hint"></div>
+<div class="ui toast" id="toast"></div>
+<button class="ui invite" id="invite" hidden data-i18n="invite"></button>
+<button class="ui fade" id="inkdot" data-i18n-title="colorTitle"></button>
+<button class="ui fade" id="gear" data-i18n-title="gearTitle"><i></i></button>
+<div class="ui panel" id="panel" hidden>
+  <h3 data-i18n="h_language"></h3>
+  <label><span data-i18n="l_language"></span><select id="lang"><option value="en">English</option><option value="ru">Русский</option></select></label>
+  <h3 data-i18n="h_character"></h3>
+  <label><span data-i18n="l_ink"></span><select id="preset"><option value="tush" data-i18n="o_tush"></option><option value="silk" data-i18n="o_silk"></option><option value="smoke" data-i18n="o_smoke"></option><option value="oil" data-i18n="o_oil"></option><option value="water" data-i18n="o_water"></option><option value="dust" data-i18n="o_dust"></option><option value="custom" data-i18n="o_custom"></option></select></label>
+  <h3 data-i18n="h_brush"></h3>
+  <div class="inks" id="inks"></div>
+  <label><span data-i18n="l_custom"></span><input type="color" id="custom" value="#f2b95a"></label>
+  <label><span data-i18n="l_speed"></span><input type="range" id="speed" min=".2" max="1.6" step=".05" value=".65"></label>
+  <label><span data-i18n="l_amount"></span><input type="range" id="amount" min=".3" max="2.2" step=".05" value="1"></label>
+  <h3 data-i18n="h_particles"></h3>
+  <label><span data-i18n="l_detail"></span><select id="detail"><option value="auto" data-i18n="o_auto"></option><option value="1024" data-i18n="o_soft"></option><option value="1536" data-i18n="o_medium"></option><option value="2048" data-i18n="o_fine"></option><option value="3072" data-i18n="o_finest"></option></select></label>
+  <label><span data-i18n="l_thickness"></span><input type="range" id="rad" min=".25" max="2.5" step=".05" value="1"></label>
+  <label><span data-i18n="l_fiber"></span><input type="range" id="fiber" min="0" max="1.2" step=".02" value=".35"></label>
+  <label><span data-i18n="l_sharp"></span><input type="range" id="sharp" min=".5" max="1.9" step=".05" value="1"></label>
+  <h3 data-i18n="h_water"></h3>
+  <label><span data-i18n="l_gravity"></span><input type="range" id="grav" min="0" max="45" step="1" value="14"></label>
+  <label><span data-i18n="l_curl"></span><input type="range" id="curl" min="0" max="55" step="1" value="30"></label>
+  <label><span data-i18n="l_spread"></span><input type="range" id="diff" min="0" max="1" step=".02" value=".35"></label>
+  <h3 data-i18n="h_autopilot"></h3>
+  <label><span data-i18n="l_autobrush"></span><select id="auto"><option value="idle" selected data-i18n="o_idle"></option><option value="always" data-i18n="o_always"></option><option value="off" data-i18n="o_never"></option></select></label>
+  <label><span data-i18n="l_autodrops"></span><select id="drops"><option value="on" selected data-i18n="o_yes"></option><option value="off" data-i18n="o_no"></option></select></label>
+  <h3 data-i18n="h_sound"></h3>
+  <div class="btns"><button id="snd"></button><button id="mic"></button><button id="sys"></button></div>
+  <label><span data-i18n="l_volume"></span><input type="range" id="vol" min="0" max="1" step=".02" value=".8"></label>
+  <label><span data-i18n="l_sens"></span><input type="range" id="sens" min=".3" max="2" step=".05" value="1"></label>
+  <p id="micNote"></p>
+  <h3 data-i18n="h_scene"></h3>
+  <div class="btns"><button id="clr" data-i18n="b_clear"></button><button id="fs" data-i18n="b_fs"></button></div>
+  <h3 data-i18n="h_record"></h3>
+  <label><span data-i18n="l_size"></span><select id="pRes"><option value="1920x1080">1920 &#215; 1080</option><option value="2560x1440">2560 &#215; 1440</option><option value="3840x2160">3840 &#215; 2160</option><option value="1080x1920">1080 &#215; 1920</option><option value="win" data-i18n="o_win"></option></select></label>
+  <label><span data-i18n="l_length"></span><select id="pDur"><option value="10" data-i18n="sec10"></option><option value="20" selected data-i18n="sec20"></option><option value="30" data-i18n="sec30"></option><option value="60" data-i18n="sec60"></option></select></label>
+  <label><span data-i18n="l_format"></span><select id="pFmt"></select></label>
+  <div class="btns"><button id="pSnap"></button></div>
+  <button class="go" id="pGo"></button>
+  <p id="pNote"></p>
+  <p data-i18n="keys"></p>
 </div>
+<div class="err" id="err" data-i18n="err"></div>
+<script>
+const $=id=>document.getElementById(id);
+const canvas=$('c');
+const gl=canvas.getContext('webgl2',{alpha:false,depth:false,stencil:false,antialias:false});
+if(!gl||!gl.getExtension('EXT_color_buffer_float')){$('err').style.display='grid';throw new Error('no webgl2 float');}
+gl.getExtension('OES_texture_float_linear');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const bare=/[?&]bare\b/.test(location.search);
+if(bare)document.documentElement.classList.add('bare');
+
+// ---------- settings ----------
+const PRESETS={
+ tush:{speed:.65,amount:1,curl:30,grav:14,diff:.35,rad:1,fiber:.35,sharp:1,detail:1536},
+ silk:{speed:.5,amount:.85,curl:44,grav:5,diff:.12,rad:.45,fiber:.8,sharp:1.3,detail:2048},
+ smoke:{speed:.85,amount:.55,curl:16,grav:2,diff:.8,rad:1.7,fiber:.55,sharp:.65,detail:1536},
+ oil:{speed:.4,amount:1.8,curl:10,grav:36,diff:.06,rad:1.9,fiber:.1,sharp:1.6,detail:1536},
+ water:{speed:.6,amount:.7,curl:7,grav:3,diff:1,rad:2.3,fiber:.18,sharp:.55,detail:1024},
+ dust:{speed:.7,amount:.5,curl:52,grav:9,diff:.05,rad:.3,fiber:1,sharp:1.7,detail:2048}};
+const S={preset:'tush',speed:.65,amount:1,curl:30,grav:14,diff:.35,rad:1,fiber:.35,sharp:1,detail:'auto',auto:'idle',drops:'on',vol:.8,sens:1,ink:-1};
+let saved=null;try{saved=JSON.parse(localStorage.getItem('tush')||'null')}catch(e){}
+const coarse=matchMedia('(pointer:coarse)').matches;
+const weak=coarse||(navigator.hardwareConcurrency||8)<=4;
+if(weak)S.speed=.6;
+if(saved)Object.assign(S,saved);
+function save(){try{localStorage.setItem('tush',JSON.stringify(S))}catch(e){}}
+
+// ---------- shaders ----------
+const VS=`#version 300 es
+precision highp float;in vec2 a;out vec2 vUv,vL,vR,vT,vB;uniform vec2 texelSize;
+void main(){vUv=a*.5+.5;vL=vUv-vec2(texelSize.x,0.);vR=vUv+vec2(texelSize.x,0.);vT=vUv+vec2(0.,texelSize.y);vB=vUv-vec2(0.,texelSize.y);gl_Position=vec4(a,0.,1.);}`;
+const H=`#version 300 es
+precision highp float;precision highp sampler2D;in vec2 vUv,vL,vR,vT,vB;out vec4 o;`;
+const F={
+splat:H+`uniform sampler2D uTarget;uniform float aspect,radius;uniform vec3 color;uniform vec2 point;
+void main(){vec2 p=vUv-point;p.x*=aspect;o=vec4(texture(uTarget,vUv).xyz+exp(-dot(p,p)/radius)*color,1.);}`,
+advect:H+`uniform sampler2D uVelocity,uSource;uniform vec2 texelSize,srcTexel;uniform float dt,dissipation,diffuse,fiber,ntime;
+float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(h21(i),h21(i+vec2(1,0)),f.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),f.x),f.y);}
+vec2 curlN(vec2 p){float e=.09;
+ float a=vn(p+vec2(0,e)),b=vn(p-vec2(0,e)),c1=vn(p+vec2(e,0)),d1=vn(p-vec2(e,0));
+ return vec2(a-b,d1-c1)/(2.*e);}
+void main(){vec2 c=vUv-dt*texture(uVelocity,vUv).xy*texelSize;
+ if(fiber>0.){vec2 f1=curlN(vUv*10.+vec2(ntime*.028,-ntime*.019));
+  vec2 f2=curlN(vUv*26.+vec2(-ntime*.047,ntime*.036));
+  c+=(f1*.62+f2*.38)*fiber*srcTexel*3.2;}
+ vec4 v=texture(uSource,c);
+ if(diffuse>0.){vec4 nb=(texture(uSource,c+vec2(srcTexel.x,0.))+texture(uSource,c-vec2(srcTexel.x,0.))+texture(uSource,c+vec2(0.,srcTexel.y))+texture(uSource,c-vec2(0.,srcTexel.y)))*.25;
+  v=mix(v,nb,diffuse);}
+ o=dissipation*v;o.a=1.;}`,
+div:H+`uniform sampler2D uVelocity;
+void main(){float L=texture(uVelocity,vL).x,R=texture(uVelocity,vR).x,T=texture(uVelocity,vT).y,B=texture(uVelocity,vB).y;vec2 C=texture(uVelocity,vUv).xy;
+ if(vL.x<0.)L=-C.x;if(vR.x>1.)R=-C.x;if(vT.y>1.)T=-C.y;if(vB.y<0.)B=-C.y;o=vec4(.5*(R-L+T-B),0.,0.,1.);}`,
+curl:H+`uniform sampler2D uVelocity;
+void main(){float L=texture(uVelocity,vL).y,R=texture(uVelocity,vR).y,T=texture(uVelocity,vT).x,B=texture(uVelocity,vB).x;o=vec4(.5*(R-L-T+B),0.,0.,1.);}`,
+vort:H+`uniform sampler2D uVelocity,uCurl,uDye;uniform float curl,dt,grav;
+void main(){float L=texture(uCurl,vL).x,R=texture(uCurl,vR).x,T=texture(uCurl,vT).x,B=texture(uCurl,vB).x,C=texture(uCurl,vUv).x;
+ vec2 f=.5*vec2(abs(T)-abs(B),abs(R)-abs(L));f/=length(f)+1e-4;f*=curl*C;f.y*=-1.;vec2 v=texture(uVelocity,vUv).xy+f*dt;
+ float d=length(texture(uDye,vUv).rgb);
+ v.y-=grav*d*dt;
+ v*=1.-min(.5,dt*d*.35);
+ o=vec4(clamp(v,-1000.,1000.),0.,1.);}`,
+press:H+`uniform sampler2D uPressure,uDivergence;
+void main(){float L=texture(uPressure,vL).x,R=texture(uPressure,vR).x,T=texture(uPressure,vT).x,B=texture(uPressure,vB).x;o=vec4((L+R+B+T-texture(uDivergence,vUv).x)*.25,0.,0.,1.);}`,
+grad:H+`uniform sampler2D uPressure,uVelocity;
+void main(){float L=texture(uPressure,vL).x,R=texture(uPressure,vR).x,T=texture(uPressure,vT).x,B=texture(uPressure,vB).x;vec2 v=texture(uVelocity,vUv).xy-vec2(R-L,T-B);o=vec4(v,0.,1.);}`,
+clear:H+`uniform sampler2D uTexture;uniform float value;void main(){o=value*texture(uTexture,vUv);}`,
+show:H+`uniform sampler2D uTexture;uniform vec2 texelSize;uniform float time,sharp;
+float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+void main(){
+ vec3 c=texture(uTexture,vUv).rgb;
+ float raw=length(c);
+ vec3 tint=c/max(raw,1e-4);
+ float d=pow(raw,sharp);
+ // свет проходит сквозь слой пигмента и возвращается: то, что не поглощено
+ vec3 absorb=(1.-tint)*2.0+.14;
+ vec3 T=exp(-d*2.4*absorb);
+ float S=1.-exp(-d*2.6);
+ float l=length(texture(uTexture,vL).rgb),r=length(texture(uTexture,vR).rgb),
+       tt=length(texture(uTexture,vT).rgb),b=length(texture(uTexture,vB).rgb);
+ vec3 n=normalize(vec3(r-l,tt-b,length(texelSize)*2.4));
+ float lam=clamp(dot(n,normalize(vec3(-.28,.6,.75))),0.,1.);
+ vec3 water=vec3(.05,.043,.058),lamp=vec3(1.,.955,.885);
+ vec3 col=water*(1.-S)+lamp*T*S*2.35*(.72+.5*lam);
+ // тонкая кромка светится насквозь
+ col+=lamp*tint*smoothstep(.55,.02,d)*d*1.1;
+ // мокрый блик только там, где плёнка достаточно плотная
+ col+=lamp*pow(lam,26.)*smoothstep(.2,.7,d)*.14;
+ col+=(hash(gl_FragCoord.xy+fract(time*7.))-.5)*.022;
+ vec2 q=vUv-.5;col*=1.-.5*dot(q,q);
+ col=col/(1.+col*.16);
+ o=vec4(pow(max(col,0.),vec3(.95)),1.);}`};
+function compile(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o}
+const vs=compile(gl.VERTEX_SHADER,VS);
+const P={};for(const k in F){const p=gl.createProgram();gl.attachShader(p,vs);gl.attachShader(p,compile(gl.FRAGMENT_SHADER,F[k]));gl.linkProgram(p);
+ if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));P[k]={p,u:{}};
+ const n=gl.getProgramParameter(p,gl.ACTIVE_UNIFORMS);for(let i=0;i<n;i++){const nm=gl.getActiveUniform(p,i).name;P[k].u[nm]=gl.getUniformLocation(p,nm)}}
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+
+// ---------- framebuffers ----------
+function fbo(w,h){const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+ gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA16F,w,h,0,gl.RGBA,gl.HALF_FLOAT,null);
+ const fb=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fb);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,tex,0);
+ gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT);
+ return{tex,fb,w,h,tx:1/w,ty:1/h,bind(u){gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tex);return u}}}
+function dfbo(w,h){let a=fbo(w,h),b=fbo(w,h);return{w,h,tx:1/w,ty:1/h,get read(){return a},get write(){return b},swap(){[a,b]=[b,a]}}}
+function res(r){const asp=canvas.width/canvas.height,mn=Math.round(r),mx=Math.round(r*Math.max(asp,1/asp));return asp>1?{w:mx,h:mn}:{w:mn,h:mx}}
+function blit(t){if(t){gl.bindFramebuffer(gl.FRAMEBUFFER,t.fb);gl.viewport(0,0,t.w,t.h)}else{gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,canvas.width,canvas.height)}gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
+function use(k,tx,ty){gl.useProgram(P[k].p);gl.uniform2f(P[k].u.texelSize,tx,ty);return P[k].u}
+let vel,dye,div,curl,pres,dyeCap=1536,recorder=null;
+const STEPS=[768,1024,1536,2048,3072];
+let liveDetail=1536;
+function targetDetail(){return S.detail==='auto'?liveDetail:+S.detail}
+// мерим время кадра и сами двигаем сетку, пока выбрано «авто»
+let ftAcc=0,ftN=0,lastTune=0;
+function tune(now,real){
+ if(S.detail!=='auto'||recorder||document.hidden){ftAcc=0;ftN=0;lastTune=now;return}
+ ftAcc+=real;ftN++;
+ if(now-lastTune<2600||ftN<40)return;
+ const avg=ftAcc/ftN;ftAcc=0;ftN=0;lastTune=now;
+ const i=STEPS.indexOf(liveDetail);if(i<0)return;
+ if(avg>1/44&&i>0){liveDetail=STEPS[i-1];dyeCap=liveDetail;init()}
+ else if(avg<1/57&&i<STEPS.length-1&&liveDetail<(weak?1536:3072)){liveDetail=STEPS[i+1];dyeCap=liveDetail;init()}}
+function init(){const s=res(160),d=res(Math.min(dyeCap,Math.max(canvas.width,canvas.height)));const oV=vel,oD=dye;
+ vel=dfbo(s.w,s.h);pres=dfbo(s.w,s.h);div=fbo(s.w,s.h);curl=fbo(s.w,s.h);dye=dfbo(d.w,d.h);
+ if(oD){const u=use('clear',0,0);gl.uniform1f(u.value,1);gl.uniform1i(u.uTexture,oD.read.bind(0));blit(dye.write);dye.swap();gl.uniform1i(u.uTexture,oV.read.bind(0));blit(vel.write);vel.swap()}}
+function setSize(w,h){canvas.width=w;canvas.height=h;init()}
+function resize(){if(recorder)return;const dpr=Math.min(coarse?1:1.5,devicePixelRatio||1);setSize(Math.round(innerWidth*dpr),Math.round(innerHeight*dpr))}
+addEventListener('resize',resize);resize();
+
+// ---------- inks ----------
+const INKS=[['gold',[1,.72,.22]],['coral',[1,.42,.25]],['rose',[1,.32,.55]],['plum',[.6,.3,.9]],['sea',[.2,.85,.8]],['ivory',[1,.93,.78]],['own',[.95,.73,.35]]];
+const inksEl=$('inks');
+INKS.forEach(([n,c],i)=>{const b=document.createElement('button');b.dataset.ink=n;b.onclick=()=>setInk(i);inksEl.appendChild(b)});
+const autoB=document.createElement('button');autoB.className='auto';autoB.dataset.ink='auto';autoB.onclick=()=>setInk(-1);inksEl.appendChild(autoB);
+function css(c){return`rgb(${c.map(v=>Math.round(v*255)).join(',')})`}
+function paint(){[...inksEl.children].forEach((b,i)=>{if(i<INKS.length)b.style.setProperty('--c',css(INKS[i][1]));
+ b.title=T('ink_'+b.dataset.ink);if(b.dataset.ink==='auto')b.textContent=T('ink_auto');
+ b.classList.toggle('cur',i===(S.ink<0?INKS.length:S.ink))})}
+function setInk(i,quiet){S.ink=i;save();paint();if(!quiet)toast(T('ink_'+(i<0?'auto':INKS[i][0])))}
+$('custom').oninput=e=>{const h=e.target.value;INKS[6][1]=[1,3,5].map(k=>parseInt(h.slice(k,k+2),16)/255);setInk(6,true);paint()};
+if(S.custom){$('custom').value=S.custom;$('custom').oninput({target:$('custom')});setInk(S.ink,true)}
+$('custom').addEventListener('change',e=>{S.custom=e.target.value;save()});
+function lerp3(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]}
+function autoColor(t){const cyc=[0,1,2,3,4,0];const u=(t/14)%5,i=Math.floor(u);return lerp3(INKS[cyc[i]][1],INKS[cyc[i+1]][1],u-i)}
+function inkColor(t){return S.ink>=0?INKS[S.ink][1]:autoColor(t)}
+let toastT=0;function toast(s){$('toast').textContent=s;$('toast').classList.add('on');$('hint').classList.add('gone');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),1400)}
+paint();
+
+// ---------- splats ----------
+const queue=[];
+function splat(x,y,dx,dy,color,rad){const asp=canvas.width/canvas.height;let u=use('splat',vel.tx,vel.ty);
+ gl.uniform1i(u.uTarget,vel.read.bind(0));gl.uniform1f(u.aspect,asp);gl.uniform2f(u.point,x,1-y);gl.uniform3f(u.color,dx,dy,0);gl.uniform1f(u.radius,rad*(asp>1?asp:1));blit(vel.write);vel.swap();
+ gl.uniform1i(u.uTarget,dye.read.bind(0));gl.uniform3f(u.color,color[0],color[1],color[2]);blit(dye.write);dye.swap()}
+function stroke(x,y,dx,dy,down,t,mul=1){const sp=Math.hypot(dx,dy);if(sp<1)return;
+ const c=inkColor(t).map(v=>v*(down?.75:.38)*Math.min(1,.35+sp/2500)*S.amount*mul);queue.push({x,y,dx,dy,c,rad:(down?.0025:.0012)*S.rad})}
+function drop(x,y,size,t,silent){const c=inkColor(t+Math.random()*3).map(v=>v*(.7+size*60)*S.amount);
+ queue.push({x,y,dx:(Math.random()-.5)*400,dy:(Math.random()-.5)*400,c,rad:size*S.rad});if(!silent)dripSound(x,y,Math.min(1,size/.008))}
+
+// ---------- pointer ----------
+let px=.5,py=.5,down=false,lastMove=-1e9,lastDrop=0,nextDrop=1500,tsec=0,idleUI=-1e9;
+function pos(e){return[e.clientX/innerWidth,e.clientY/innerHeight]}
+function wake(){lastMove=performance.now();document.body.classList.remove('idle');$('hint').classList.add('gone')}
+addEventListener('contextmenu',e=>e.preventDefault());
+addEventListener('pointerdown',e=>{if(e.target.closest('.panel,#gear'))return;[px,py]=pos(e);wake();
+ if(e.button===2){setInk(S.ink>=INKS.length-2?-1:S.ink+1);return}
+ down=true;drop(px,py,.006,tsec)});
+addEventListener('pointermove',e=>{const[x,y]=pos(e);const was=lastMove;wake();if(e.target.closest('.panel,#gear')){px=x;py=y;return}
+ if(was>0){const dx=(x-px)*6000,dy=-(y-py)*6000;stroke(x,y,dx,dy,down,tsec);swish(Math.hypot(dx,dy)*(down?1.6:1),x,y)}
+ px=x;py=y});
+addEventListener('pointerup',()=>down=false);addEventListener('pointercancel',()=>down=false);
+document.addEventListener('mouseleave',()=>{lastMove=performance.now()-3500});
+
+// ---------- autopilot brush ----------
+const ap={x:.5,y:.5,seed:Math.random()*100,init:false};
+function autopilot(t,dt){const s=ap.seed;const x=.5+.34*Math.sin(t*.17+s)+.11*Math.sin(t*.43+s*2.1),y=.5+.3*Math.cos(t*.21+s*3)+.1*Math.sin(t*.57+s);
+ if(ap.init){const dx=(x-ap.x)*6000,dy=-(y-ap.y)*6000;stroke(x,y,dx*.9,dy*.9,false,t,Math.min(.5,Math.hypot(dx,dy)/120));swish(Math.hypot(dx,dy)*.5,x,y)}ap.x=x;ap.y=y;ap.init=true}
+
+// ---------- sound ----------
+let ac=null,on=false,master,bus,swishGain,swishFilter,swishPan,swishLevel=0,swishPos=[.5,.5],lastBubble=0;
+function noiseBuf(sec,brown){const n=Math.floor(ac.sampleRate*sec),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);let l=0;
+ for(let i=0;i<n;i++){const w=Math.random()*2-1;if(brown){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w}return b}
+function impulse(sec,decay){const n=Math.floor(ac.sampleRate*sec),b=ac.createBuffer(2,n,ac.sampleRate);
+ for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay)}return b}
+function initAudio(){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+ bus=ac.createGain();const dry=ac.createGain();dry.gain.value=.8;const conv=ac.createConvolver();conv.buffer=impulse(2.8,2.4);const cl=ac.createBiquadFilter();cl.type='lowpass';cl.frequency.value=2600;const wet=ac.createGain();wet.gain.value=.45;
+ bus.connect(dry);dry.connect(master);bus.connect(cl);cl.connect(conv);conv.connect(wet);wet.connect(master);
+ // underwater bed
+ const bed=ac.createBufferSource();bed.buffer=noiseBuf(4,true);bed.loop=true;const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=300;lp.Q.value=.7;
+ const lfo=ac.createOscillator();lfo.frequency.value=.05;const lg=ac.createGain();lg.gain.value=130;lfo.connect(lg);lg.connect(lp.frequency);
+ const bg=ac.createGain();bg.gain.value=.42;bed.connect(lp);lp.connect(bg);bg.connect(master);bed.start();lfo.start();
+ // slow lapping of water at the edges
+ const lap=ac.createBufferSource();lap.buffer=noiseBuf(3,false);lap.loop=true;const lbp=ac.createBiquadFilter();lbp.type='bandpass';lbp.frequency.value=420;lbp.Q.value=1.4;
+ const lgn=ac.createGain();lgn.gain.value=0;const l2=ac.createOscillator();l2.frequency.value=.11;const g2=ac.createGain();g2.gain.value=.02;l2.connect(g2);g2.connect(lgn.gain);
+ lap.connect(lbp);lbp.connect(lgn);lgn.connect(bus);lap.start();l2.start();
+ // brush swish
+ const sw=ac.createBufferSource();sw.buffer=noiseBuf(2,false);sw.loop=true;swishFilter=ac.createBiquadFilter();swishFilter.type='bandpass';swishFilter.frequency.value=700;swishFilter.Q.value=1.1;
+ swishGain=ac.createGain();swishGain.gain.value=0;swishPan=ac.createStereoPanner();sw.connect(swishFilter);swishFilter.connect(swishGain);swishGain.connect(swishPan);swishPan.connect(bus);sw.start();}
+// position → distance attenuation, dullness and stereo placement
+function spatial(x,y){const asp=innerWidth/innerHeight,d=Math.hypot((x-.5)*Math.min(asp,1.8),(y-.5)*1.2);
+ const g=ac.createGain();g.gain.value=1/(1+d*2.6);const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500/(1+d*3.5);
+ const pan=ac.createStereoPanner();pan.pan.value=Math.max(-1,Math.min(1,(x-.5)*1.8));g.connect(lp);lp.connect(pan);pan.connect(bus);return g}
+function dripSound(x,y,size,vol=1){if(!on)return;const t=ac.currentTime,out=spatial(x,y);
+ // the bubble: pitch rises as the cavity closes
+ const f0=(1400-size*1000)*(.9+Math.random()*.25);
+ const o=ac.createOscillator();o.type='sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f0*1.9,t+.11+size*.12);
+ const g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.55*vol,t+.004);g.gain.exponentialRampToValueAtTime(.0004,t+.16+size*.4);
+ o.connect(g);g.connect(out);o.start(t);o.stop(t+.9);
+ // low thump for bigger drops
+ if(size>.25){const o2=ac.createOscillator();o2.frequency.setValueAtTime(120+50*(1-size),t);o2.frequency.exponentialRampToValueAtTime(48,t+.16);
+  const g2=ac.createGain();g2.gain.setValueAtTime(.45*size*vol,t);g2.gain.exponentialRampToValueAtTime(.0004,t+.24);o2.connect(g2);g2.connect(out);o2.start(t);o2.stop(t+.3)}
+ // splash
+ const n=ac.createBufferSource();n.buffer=noiseBuf(.35,false);const bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2400+2200*(1-size);bp.Q.value=.8;
+ const ng=ac.createGain();ng.gain.setValueAtTime((.06+.18*size)*vol,t);ng.gain.exponentialRampToValueAtTime(.0004,t+.1+size*.14);n.connect(bp);bp.connect(ng);ng.connect(out);n.start(t)}
+function swish(speed,x,y){if(!on)return;swishLevel=Math.min(1,swishLevel+speed/9000);swishPos=[x,y];
+ swishFilter.frequency.setTargetAtTime(450+Math.min(2600,speed*.6),ac.currentTime,.06);swishPan.pan.setTargetAtTime((x-.5)*1.6,ac.currentTime,.1);
+ // fast strokes trap air: small bubbles
+ const now=performance.now();if(speed>1800&&now-lastBubble>90&&Math.random()<.35){lastBubble=now;dripSound(x+(Math.random()-.5)*.05,y+(Math.random()-.5)*.05,.05+Math.random()*.15,.35)}}
+function soundTick(dt){if(!on)return;swishLevel*=Math.exp(-dt*6);swishGain.gain.setTargetAtTime(swishLevel*.14,ac.currentTime,.03)}
+function ensureAudio(){if(!ac)initAudio();if(ac.state==='suspended')ac.resume()}
+function setSound(v){ensureAudio();on=v;master.gain.setTargetAtTime(on?S.vol:0,ac.currentTime,.6);$('snd').textContent=T(on?'snd_on':'snd_off');$('snd').classList.toggle('on',on)}
+$('snd').onclick=()=>setSound(!on);
+// один раз за всё время предлагаем включить звук
+const SEEN='tush-snd-seen';
+function hideInvite(){$('invite').classList.remove('on');setTimeout(()=>{$('invite').hidden=true},1300);
+ try{localStorage.setItem(SEEN,'1')}catch(e){}}
+$('invite').onclick=()=>{setSound(true);hideInvite();toast(T('t_sound_on'))};
+let sndSeen=true;try{sndSeen=!!localStorage.getItem(SEEN)}catch(e){}
+if(!sndSeen)setTimeout(()=>{if(on)return;
+ $('invite').hidden=false;requestAnimationFrame(()=>$('invite').classList.add('on'));
+ $('hint').classList.add('gone');setTimeout(()=>{if(!on)hideInvite()},22000)},9000);
+
+// ---------- listening: microphone or system audio ----------
+let listen=null,micBase={low:0,high:0,all:0},lastLow=0,lastHigh=0;
+let noteKey='n_default';
+function note(k){noteKey=k;$('micNote').textContent=T(k)}
+function stopListen(){if(listen){try{listen.stream.getTracks().forEach(t=>t.stop())}catch(e){}listen=null}
+ $('mic').textContent=T('mic');$('mic').classList.remove('on');$('sys').textContent=T('sys');$('sys').classList.remove('on')}
+function startAnalyser(stream,labelKey,btn){ensureAudio();
+ const src=ac.createMediaStreamSource(stream),an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=.5;src.connect(an);
+ listen={stream,an,data:new Uint8Array(an.frequencyBinCount)};micBase={low:0,high:0,all:0};
+ btn.textContent=T(labelKey);btn.classList.add('on');
+ const tr=stream.getTracks()[0];if(tr)tr.addEventListener('ended',stopListen);
+ note('n_listening')}
+function why(e){const n=e&&e.name;
+ if(n==='NotAllowedError')return location.protocol==='file:'?'n_file':'n_denied';
+ if(n==='NotFoundError')return 'n_nodevice';
+ if(n==='NotReadableError')return 'n_busy';
+ if(n==='SecurityError')return 'n_insecure';
+ return 'n_failed'}
+$('mic').onclick=async()=>{if(listen){stopListen();note('n_off');return}
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){note('n_denied');return}
+ note('n_asking');
+ try{const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:false,autoGainControl:false}});
+  startAnalyser(stream,'mic_on',$('mic'))}
+ catch(e){note(why(e))}};
+$('sys').onclick=async()=>{if(listen){stopListen();note('n_off');return}
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){note('n_denied');return}
+ note('n_tickbox');
+ try{const stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+  if(!stream.getAudioTracks().length){stream.getTracks().forEach(t=>t.stop());note('n_noaudio');return}
+  stream.getVideoTracks().forEach(t=>{t.stop();stream.removeTrack(t)});
+  startAnalyser(stream,'sys_on',$('sys'))}
+ catch(e){note(why(e))}};
+function micTick(now){if(!listen)return;const d=listen.data;listen.an.getByteFrequencyData(d);const avg=(a,b)=>{let s=0;for(let i=a;i<b;i++)s+=d[i];return s/(b-a)};
+ const low=avg(2,14),high=avg(60,260),all=avg(2,260);
+ micBase.low+=(low-micBase.low)*.006;micBase.high+=(high-micBase.high)*.006;micBase.all+=(all-micBase.all)*.006;
+ const k=S.sens;
+ if(low>micBase.low+26/k&&low>40/k&&now-lastLow>260){lastLow=now;const sz=.004+Math.min(.012,(low-micBase.low)/255*.03);drop(.15+Math.random()*.7,.15+Math.random()*.7,sz,tsec,true)}
+ if(high>micBase.high+16/k&&high>22/k&&now-lastHigh>110){lastHigh=now;const n=1+Math.floor(Math.random()*3);for(let i=0;i<n;i++)drop(.1+Math.random()*.8,.1+Math.random()*.8,.0006+Math.random()*.0015,tsec,true)}
+ const e=Math.max(0,(all-micBase.all-6/k))/255;if(e>0&&Math.random()<e*4){const x=Math.random(),y=Math.random();queue.push({x,y,dx:(Math.random()-.5)*900*e,dy:(Math.random()-.5)*900*e,c:[0,0,0],rad:.004})}}
+
+// ---------- scene controls ----------
+let clearUntil=0;
+$('clr').onclick=()=>{clearUntil=performance.now()+1100};
+if(!document.documentElement.requestFullscreen)$('fs').style.display='none';
+$('fs').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{})};
+$('inkdot').onclick=()=>setInk(S.ink>=INKS.length-2?-1:S.ink+1);
+$('gear').onclick=()=>{panel.hidden=!panel.hidden;$('gear').classList.toggle('open',!panel.hidden)};
+addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
+ if(k==='f')$('fs').click();if(k==='s')$('snd').click();if(k==='r')$('pGo').click();if(k==='c')$('clr').click();if(k==='m')$('mic').click();
+ if(e.key==='Escape'){panel.hidden=true;$('gear').classList.remove('open')}});
+// bind sliders and selects to settings
+const NUMS=['speed','amount','rad','fiber','sharp','grav','curl','diff','vol','sens'];
+function syncUI(){NUMS.forEach(k=>$(k).value=S[k]);$('detail').value=S.detail;$('auto').value=S.auto;$('drops').value=S.drops;$('preset').value=S.preset}
+function markCustom(){S.preset='custom';$('preset').value='custom'}
+NUMS.forEach(k=>{$(k).oninput=()=>{S[k]=+$(k).value;if(k!=='vol'&&k!=='sens')markCustom();save();if(k==='vol'&&on)master.gain.setTargetAtTime(S.vol,ac.currentTime,.1)}});
+$('detail').onchange=()=>{const v=$('detail').value;S.detail=v==='auto'?'auto':+v;markCustom();if(v!=='auto')liveDetail=+v;dyeCap=targetDetail();init();save()};
+$('auto').onchange=()=>{S.auto=$('auto').value;save()};
+$('drops').onchange=()=>{S.drops=$('drops').value;save()};
+$('preset').onchange=()=>{const k=$('preset').value,pr=PRESETS[k];if(!pr){S.preset='custom';save();return}
+ const keepAuto=S.detail==='auto';Object.keys(pr).forEach(n=>S[n]=pr[n]);
+ if(keepAuto)S.detail='auto';else liveDetail=+S.detail;
+ S.preset=k;dyeCap=targetDetail();init();syncUI();save();toast(T('o_'+k))};
+liveDetail=weak?1024:1536;dyeCap=targetDetail();init();syncUI();
+paint();
+
+// ---------- recording ----------
+const FORMATS=[['mp4','MP4 · H.264',['video/mp4;codecs=avc1.640028,mp4a.40.2','video/mp4;codecs=avc1.640028,opus','video/mp4;codecs=avc1,opus','video/mp4;codecs=avc1','video/mp4']],
+ ['webm','WebM · VP9',['video/webm;codecs=vp9,opus','video/webm;codecs=vp9','video/webm;codecs=vp8,opus','video/webm']]];
+const canRec=('MediaRecorder' in window)&&!!canvas.captureStream;
+const avail=canRec?FORMATS.map(([ext,label,mimes])=>[ext,label,mimes.find(m=>MediaRecorder.isTypeSupported(m))]).filter(f=>f[2]):[];
+avail.forEach(([ext,label,mime])=>{const o=document.createElement('option');o.value=ext;o.textContent=label;o.dataset.mime=mime;$('pFmt').appendChild(o)});
+const pNoteKey=!canRec?'r_norec':avail[0][0]==='mp4'?'r_mp4':'r_webm';
+let recCanvas=null,recCtx=null,recW=0,recH=0,snapWant=null,snapPhase=0;
+function pickSize(){return $('pRes').value==='win'?[canvas.width,canvas.height]:$('pRes').value.split('x').map(Number)}
+$('pSnap').onclick=()=>{if(recorder||snapWant)return;const[w,h]=pickSize();
+ snapWant={w,h};snapPhase=0;$('pSnap').textContent=T('b_preparing');
+ if($('pRes').value!=='win'){recorder=true;const k=Math.max(w/innerWidth,h/innerHeight);
+  dyeCap=Math.max(w,h)>=1440?2048:1536;setSize(Math.round(innerWidth*k),Math.round(innerHeight*k))}};
+function takeSnap(){const{w,h}=snapWant;snapWant=null;
+ const out=document.createElement('canvas');out.width=w;out.height=h;const cx=out.getContext('2d');
+ const sa=canvas.width/canvas.height,ta=w/h;let sw,sh;if(sa>ta){sh=canvas.height;sw=sh*ta}else{sw=canvas.width;sh=sw/ta}
+ cx.drawImage(canvas,(canvas.width-sw)/2,(canvas.height-sh)/2,sw,sh,0,0,w,h);
+ recorder=null;dyeCap=targetDetail();resize();
+ out.toBlob(b=>{const name=`ink-and-water-${w}x${h}.png`,u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),4000);
+  $('pSnap').textContent=T('b_snapshot')},'image/png')}
+$('pGo').onclick=()=>{if(recorder&&recorder!==true){recorder.stop();return}if(!canRec||!avail.length)return;
+ const dur=+$('pDur').value*1000,opt=$('pFmt').selectedOptions[0],mime=opt.dataset.mime,ext=opt.value;
+ let w,h;if($('pRes').value==='win'){w=canvas.width;h=canvas.height}else[w,h]=$('pRes').value.split('x').map(Number);
+ recorder=true;const k=Math.max(w/innerWidth,h/innerHeight);dyeCap=Math.max(h,w)>=1440?2048:1536;
+ if($('pRes').value!=='win')setSize(Math.round(innerWidth*k),Math.round(innerHeight*k));
+ recCanvas=document.createElement('canvas');recCanvas.width=recW=w;recCanvas.height=recH=h;recCtx=recCanvas.getContext('2d');
+ const stream=recCanvas.captureStream(60);
+ if(on&&ac){const dst=ac.createMediaStreamDestination();master.connect(dst);dst.stream.getAudioTracks().forEach(t=>stream.addTrack(t))}
+ const chunks=[];recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:Math.round(w*h*6)});
+ recorder.ondataavailable=e=>chunks.push(e.data);
+ recorder.onstop=()=>{const blob=new Blob(chunks,{type:mime}),name=`ink-and-water-${w}x${h}.${ext}`;
+  recorder=null;recCanvas=null;dyeCap=targetDetail();resize();clearTimeout($('pGo')._t);
+  const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),8000);
+  $('pGo').textContent=T('b_record');$('pGo').classList.remove('busy')};
+ recorder.start(250);const t0=performance.now();panel.hidden=true;$('gear').classList.remove('open');
+ const tick=()=>{if(!recorder||recorder===true)return;const left=Math.max(0,Math.ceil((dur-(performance.now()-t0))/1000));$('pGo').textContent=T('b_recording').replace('%s',left);if(left>0)$('pGo')._t=setTimeout(tick,250);else recorder.stop()};tick()};
+
+// ---------- simulation ----------
+let last=performance.now();
+function step(dt){let u;const clr=clearUntil>performance.now();
+ u=use('curl',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));blit(curl);
+ u=use('vort',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uCurl,curl.bind(1));gl.uniform1i(u.uDye,dye.read.bind(2));gl.uniform1f(u.curl,S.curl);gl.uniform1f(u.grav,S.grav);gl.uniform1f(u.dt,dt);blit(vel.write);vel.swap();
+ u=use('div',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));blit(div);
+ u=use('clear',vel.tx,vel.ty);gl.uniform1i(u.uTexture,pres.read.bind(0));gl.uniform1f(u.value,.8);blit(pres.write);pres.swap();
+ u=use('press',vel.tx,vel.ty);gl.uniform1i(u.uDivergence,div.bind(0));for(let i=0;i<22;i++){gl.uniform1i(u.uPressure,pres.read.bind(1));blit(pres.write);pres.swap()}
+ u=use('grad',vel.tx,vel.ty);gl.uniform1i(u.uPressure,pres.read.bind(0));gl.uniform1i(u.uVelocity,vel.read.bind(1));blit(vel.write);vel.swap();
+ u=use('advect',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,vel.read.bind(0));gl.uniform2f(u.srcTexel,vel.tx,vel.ty);gl.uniform1f(u.diffuse,0);gl.uniform1f(u.fiber,0);gl.uniform1f(u.dt,dt);gl.uniform1f(u.dissipation,clr?1/(1+dt*7):1/(1+dt*.35));blit(vel.write);vel.swap();
+ gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,dye.read.bind(1));gl.uniform2f(u.srcTexel,dye.tx,dye.ty);gl.uniform1f(u.diffuse,Math.min(.5,dt*S.diff*9));gl.uniform1f(u.fiber,S.fiber);gl.uniform1f(u.ntime,tsec);gl.uniform1f(u.dissipation,clr?1/(1+dt*7):1/(1+dt*.08));blit(dye.write);dye.swap()}
+document.addEventListener('visibilitychange',()=>{if(!ac)return;
+ master.gain.setTargetAtTime(document.hidden?0:(on?S.vol:0),ac.currentTime,.25)});
+function frame(now){const real=Math.min((now-last)/1000,1/30);last=now;tsec=now/1000;const dt=real*S.speed;
+ const idle=now-lastMove>3200;if(idle)document.body.classList.add('idle');
+ if(S.auto==='always'||(S.auto==='idle'&&idle))autopilot(tsec,real);else ap.init=false;
+ if(S.drops==='on'&&!reduced&&idle&&now-lastDrop>nextDrop){lastDrop=now;nextDrop=2200+Math.random()*3500;drop(.15+Math.random()*.7,.15+Math.random()*.7,.003+Math.random()*.004,tsec)}
+ micTick(now);
+ while(queue.length){const s=queue.shift();splat(s.x,s.y,s.dx,s.dy,s.c,s.rad)}
+ step(dt);soundTick(real);tune(now,real);
+ {const cc=css(inkColor(tsec));if(S.ink<0)autoB.style.setProperty('--c',cc);$('inkdot').style.setProperty('--c',cc);}
+ const u=use('show',dye.tx,dye.ty);gl.uniform1i(u.uTexture,dye.read.bind(0));gl.uniform1f(u.time,tsec);gl.uniform1f(u.sharp,S.sharp);blit(null);
+ if(snapWant&&snapPhase++>2)takeSnap();
+ if(recCanvas){const sa=canvas.width/canvas.height,ta=recW/recH;let sw,sh;if(sa>ta){sh=canvas.height;sw=sh*ta}else{sw=canvas.width;sh=sw/ta}
+  recCtx.drawImage(canvas,(canvas.width-sw)/2,(canvas.height-sh)/2,sw,sh,0,0,recW,recH)}
+ requestAnimationFrame(frame)}
+queue.push({x:.55,y:.45,dx:120,dy:-80,c:INKS[0][1].map(v=>v*1.3),rad:.007});
+queue.push({x:.4,y:.6,dx:-90,dy:60,c:INKS[2][1].map(v=>v*.9),rad:.005});
+requestAnimationFrame(frame);
+
+function applyLang(){
+ document.documentElement.lang=LANG;
+ document.querySelectorAll('[data-i18n]').forEach(e=>{e.textContent=T(e.dataset.i18n)});
+ document.querySelectorAll('[data-i18n-title]').forEach(e=>{e.title=T(e.dataset.i18nTitle)});
+ $('snd').textContent=T(on?'snd_on':'snd_off');
+ if(!listen){$('mic').textContent=T('mic');$('sys').textContent=T('sys')}
+ $('pSnap').textContent=T('b_snapshot');
+ if(!recorder)$('pGo').textContent=T('b_record');
+ $('pNote').textContent=T(pNoteKey);
+ $('micNote').textContent=T(noteKey);
+ $('lang').value=LANG;
+ paint();
+}
+$('lang').onchange=()=>{LANG=$('lang').value;try{localStorage.setItem('iw-lang',LANG)}catch(e){}applyLang()};
+applyLang();
+</script>
 </body>
 </html>
