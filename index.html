@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ink and Water</title>
-<meta name="description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<title>Inkfall</title>
+<meta name="description" content="Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
 <meta name="theme-color" content="#0d0b10">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index,follow">
 <meta name="keywords" content="fluid simulation, ink in water, webgl, webgl2, generative art, creative coding, navier stokes, interactive art, shader, relaxing visuals, ambient, browser experiment">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Ink and Water">
-<meta property="og:title" content="Ink and Water">
-<meta property="og:description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<meta property="og:site_name" content="Inkfall">
+<meta property="og:title" content="Inkfall">
+<meta property="og:description" content="Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Ink and Water">
-<meta name="twitter:description" content="Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
+<meta name="twitter:title" content="Inkfall">
+<meta name="twitter:description" content="Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23f2b95a'/%3E%3Cstop offset='1' stop-color='%23ff5a3c'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='%230d0b10'/%3E%3Ccircle cx='16' cy='16' r='9' fill='url(%23g)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,7 +73,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 @media (max-width:600px){.name{font-size:20px}.hint{display:none}.panel{width:calc(100vw - 44px)}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Ink and Water","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Ink and Water: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture."}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Inkfall","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture."}
 </script>
 <script>
 if(location.protocol.startsWith('http')&&!/^(localhost|127\.|\[::1\])/.test(location.hostname)){
@@ -85,7 +85,7 @@ if(location.protocol.startsWith('http')&&!/^(localhost|127\.|\[::1\])/.test(loca
 <script>
 const DICT={
 en:{
- name:"Ink and Water", tagline:"slow fluid dynamics",
+ name:"Inkfall", tagline:"slow fluid dynamics",
  hint:"Move the pointer to release ink. Click to drop a bead, right-click to change colour. Leave it alone and the brush takes over. Settings are in the bottom right corner.",
  invite:"♪ turn on the water", colorTitle:"change colour", gearTitle:"settings",
  h_language:"Language", l_language:"Interface",
@@ -126,7 +126,7 @@ en:{
  r_webm:"This browser writes WebM only. Open in Chrome for MP4."
 },
 ru:{
- name:"Тушь и вода", tagline:"медленная гидродинамика",
+ name:"Inkfall", tagline:"медленная гидродинамика",
  hint:"Веди мышью, чтобы пустить тушь. Клик роняет каплю, правая кнопка меняет цвет. Оставь в покое, и кисть пойдёт сама. Настройки в правом нижнем углу.",
  invite:"♪ включить звук воды", colorTitle:"сменить цвет", gearTitle:"настройки",
  h_language:"Язык", l_language:"Интерфейс",
@@ -168,7 +168,7 @@ ru:{
 }};
 let LANG=(()=>{const p=new URLSearchParams(location.search).get('lang');
  if(p==='ru'||p==='en')return p;
- try{const s=localStorage.getItem('iw-lang');if(s==='ru'||s==='en')return s}catch(e){}
+ try{const s=localStorage.getItem('inkfall-lang');if(s==='ru'||s==='en')return s}catch(e){}
  return (navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en'})();
 const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 </script>
@@ -238,12 +238,12 @@ const PRESETS={
  water:{speed:.6,amount:.7,curl:7,grav:3,diff:1,rad:2.3,fiber:.18,sharp:.55,detail:1024},
  dust:{speed:.7,amount:.5,curl:52,grav:9,diff:.05,rad:.3,fiber:1,sharp:1.7,detail:2048}};
 const S={preset:'tush',speed:.65,amount:1,curl:30,grav:14,diff:.35,rad:1,fiber:.35,sharp:1,detail:'auto',auto:'idle',drops:'on',vol:.8,sens:1,ink:-1};
-let saved=null;try{saved=JSON.parse(localStorage.getItem('tush')||'null')}catch(e){}
+let saved=null;try{saved=JSON.parse(localStorage.getItem('inkfall')||'null')}catch(e){}
 const coarse=matchMedia('(pointer:coarse)').matches;
 const weak=coarse||(navigator.hardwareConcurrency||8)<=4;
 if(weak)S.speed=.6;
 if(saved)Object.assign(S,saved);
-function save(){try{localStorage.setItem('tush',JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem('inkfall',JSON.stringify(S))}catch(e){}}
 
 // ---------- shaders ----------
 const VS=`#version 300 es
@@ -445,7 +445,7 @@ function ensureAudio(){if(!ac)initAudio();if(ac.state==='suspended')ac.resume()}
 function setSound(v){ensureAudio();on=v;master.gain.setTargetAtTime(on?S.vol:0,ac.currentTime,.6);$('snd').textContent=T(on?'snd_on':'snd_off');$('snd').classList.toggle('on',on)}
 $('snd').onclick=()=>setSound(!on);
 // один раз за всё время предлагаем включить звук
-const SEEN='tush-snd-seen';
+const SEEN='inkfall-sound-seen';
 function hideInvite(){$('invite').classList.remove('on');setTimeout(()=>{$('invite').hidden=true},1300);
  try{localStorage.setItem(SEEN,'1')}catch(e){}}
 $('invite').onclick=()=>{setSound(true);hideInvite();toast(T('t_sound_on'))};
@@ -537,7 +537,7 @@ function takeSnap(){const{w,h}=snapWant;snapWant=null;
  const sa=canvas.width/canvas.height,ta=w/h;let sw,sh;if(sa>ta){sh=canvas.height;sw=sh*ta}else{sw=canvas.width;sh=sw/ta}
  cx.drawImage(canvas,(canvas.width-sw)/2,(canvas.height-sh)/2,sw,sh,0,0,w,h);
  recorder=null;dyeCap=targetDetail();resize();
- out.toBlob(b=>{const name=`ink-and-water-${w}x${h}.png`,u=URL.createObjectURL(b);
+ out.toBlob(b=>{const name=`inkfall-${w}x${h}.png`,u=URL.createObjectURL(b);
   const a=document.createElement('a');a.href=u;a.download=name;a.click();
   setTimeout(()=>URL.revokeObjectURL(u),4000);
   $('pSnap').textContent=T('b_snapshot')},'image/png')}
@@ -551,7 +551,7 @@ $('pGo').onclick=()=>{if(recorder&&recorder!==true){recorder.stop();return}if(!c
  if(on&&ac){const dst=ac.createMediaStreamDestination();master.connect(dst);dst.stream.getAudioTracks().forEach(t=>stream.addTrack(t))}
  const chunks=[];recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:Math.round(w*h*6)});
  recorder.ondataavailable=e=>chunks.push(e.data);
- recorder.onstop=()=>{const blob=new Blob(chunks,{type:mime}),name=`ink-and-water-${w}x${h}.${ext}`;
+ recorder.onstop=()=>{const blob=new Blob(chunks,{type:mime}),name=`inkfall-${w}x${h}.${ext}`;
   recorder=null;recCanvas=null;dyeCap=targetDetail();resize();clearTimeout($('pGo')._t);
   const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.click();
   setTimeout(()=>URL.revokeObjectURL(u),8000);
@@ -602,7 +602,7 @@ function applyLang(){
  $('lang').value=LANG;
  paint();
 }
-$('lang').onchange=()=>{LANG=$('lang').value;try{localStorage.setItem('iw-lang',LANG)}catch(e){}applyLang()};
+$('lang').onchange=()=>{LANG=$('lang').value;try{localStorage.setItem('inkfall-lang',LANG)}catch(e){}applyLang()};
 applyLang();
 </script>
 </body>

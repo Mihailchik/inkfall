@@ -1,4 +1,4 @@
-# Ink and Water
+# Inkfall
 
 A GPU fluid simulation that runs in the browser. Move the pointer and ink blooms
 through water in plumes and filaments. One self-contained HTML page: no build
