@@ -65,7 +65,8 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .btns button.busy{color:#ff7a6a;border-color:#ff7a6a}
 .panel .go{color:var(--gold);border-color:var(--gold);width:100%;margin-top:8px}
 .panel p{margin:6px 0 0;font-size:11px;line-height:1.4;color:var(--mute)}
-.back{left:28px;top:86px;font:300 11px/1 'Jost',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);text-decoration:none;transition:color .3s,opacity 1.6s}
+.credit{left:28px;top:88px;font:300 11px/1 'Jost',sans-serif;letter-spacing:.16em;color:var(--mute);text-decoration:none;transition:color .3s,opacity 1.6s}
+.credit:hover,.credit:focus-visible{color:var(--gold);outline:none}
 .back:hover,.back:focus-visible{color:var(--ink);outline:none}
 #inkdot{display:none;right:22px;bottom:62px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--c,#f2b95a);cursor:pointer;padding:0;box-shadow:0 0 14px color-mix(in srgb,var(--c,#f2b95a) 45%,transparent)}
 @media (pointer:coarse){#inkdot{display:block}.panel{bottom:106px}}
@@ -79,7 +80,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 @media (max-width:600px){.name{font-size:20px}.hint{display:none}.panel{width:calc(100vw - 44px)}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Inkfall","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture."}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Inkfall","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"author":{"@type":"Organization","name":"voidstudio","url":"https://voidstudio.top"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Inkfall: a GPU fluid simulation in your browser. Move the pointer and ink blooms through water in plumes and filaments. Sound, microphone reactivity, PNG stills and 4K video capture."}
 </script>
 <script>
 if(location.protocol.startsWith('http')&&!/^(localhost|127\.|\[::1\])/.test(location.hostname)){
@@ -94,6 +95,7 @@ en:{
  name:"Inkfall", tagline:"slow fluid dynamics",
  hint:"Move the pointer to release ink. Click to drop a bead, right-click to change colour. Leave it alone and the brush takes over. Settings are in the bottom right corner.",
  invite:"♪ turn on the water", colorTitle:"change colour", gearTitle:"settings",
+ credit:"by voidstudio.top",
  h_language:"Language", l_language:"Interface",
  h_character:"Character", l_ink:"Ink",
  o_tush:"ink", o_silk:"silk", o_smoke:"smoke", o_oil:"oil", o_water:"watercolour", o_dust:"pollen", o_custom:"custom",
@@ -135,6 +137,7 @@ ru:{
  name:"Inkfall", tagline:"медленная гидродинамика",
  hint:"Веди мышью, чтобы пустить тушь. Клик роняет каплю, правая кнопка меняет цвет. Оставь в покое, и кисть пойдёт сама. Настройки в правом нижнем углу.",
  invite:"♪ включить звук воды", colorTitle:"сменить цвет", gearTitle:"настройки",
+ credit:"сделано в voidstudio.top",
  h_language:"Язык", l_language:"Интерфейс",
  h_character:"Характер", l_ink:"Тушь",
  o_tush:"тушь", o_silk:"шёлк", o_smoke:"дым", o_oil:"масло", o_water:"акварель", o_dust:"пыльца", o_custom:"своё",
@@ -181,6 +184,7 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 <body>
 <canvas id="c"></canvas>
 <div class="ui name fade"><span class="ttl" data-i18n="name"></span><span class="sub" data-i18n="tagline"></span></div>
+<a class="ui fade credit" id="credit" href="https://voidstudio.top" target="_blank" rel="noopener" data-i18n="credit"></a>
 <div class="ui hint" id="hint" data-i18n="hint"></div>
 <div class="ui toast" id="toast"></div>
 <button class="ui invite" id="invite" hidden data-i18n="invite"></button>
