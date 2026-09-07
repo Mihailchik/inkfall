@@ -363,7 +363,7 @@ function resize(){if(recorder)return;const dpr=Math.min(coarse?1:1.5,devicePixel
 addEventListener('resize',resize);resize();
 
 // ---------- inks ----------
-const INKS=[['gold',[1,.72,.22]],['coral',[1,.42,.25]],['rose',[1,.32,.55]],['plum',[.6,.3,.9]],['sea',[.2,.85,.8]],['ivory',[1,.93,.78]],['own',[.95,.73,.35]]];
+const INKS=[['gold',[1,.72,.22]],['sea',[.2,.85,.8]],['coral',[1,.42,.25]],['plum',[.6,.3,.9]],['ivory',[1,.93,.78]],['rose',[1,.32,.55]],['own',[.95,.73,.35]]];
 const inksEl=$('inks');
 INKS.forEach(([n,c],i)=>{const b=document.createElement('button');b.dataset.ink=n;b.onclick=()=>setInk(i);inksEl.appendChild(b)});
 const autoB=document.createElement('button');autoB.className='auto';autoB.dataset.ink='auto';autoB.onclick=()=>setInk(-1);inksEl.appendChild(autoB);
@@ -376,7 +376,7 @@ $('custom').oninput=e=>{const h=e.target.value;INKS[6][1]=[1,3,5].map(k=>parseIn
 if(S.custom){$('custom').value=S.custom;$('custom').oninput({target:$('custom')});setInk(S.ink,true)}
 $('custom').addEventListener('change',e=>{S.custom=e.target.value;save()});
 function lerp3(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]}
-function autoColor(t){const cyc=[0,1,2,3,4,0];const u=(t/14)%5,i=Math.floor(u);return lerp3(INKS[cyc[i]][1],INKS[cyc[i+1]][1],u-i)}
+function autoColor(t){const cyc=[0,2,5,3,1,0];const u=(t/14)%5,i=Math.floor(u);return lerp3(INKS[cyc[i]][1],INKS[cyc[i+1]][1],u-i)}
 function inkColor(t){return S.ink>=0?INKS[S.ink][1]:autoColor(t)}
 let toastT=0;function toast(s){$('toast').textContent=s;$('toast').classList.add('on');$('hint').classList.add('gone');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),1400)}
 paint();
