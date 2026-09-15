@@ -55,7 +55,7 @@ button{font:inherit;color:inherit}
 .ui{position:fixed;z-index:2;user-select:none;transition:opacity 1.8s ease}
 /* один переключатель на всё: пока человек что-то делает — горит, потом всё вместе гаснет */
 body:not(.awake) .brand,body:not(.awake) .dock{opacity:.1}
-body:not(.awake) .hint,body.inviting .hint{opacity:0;pointer-events:none}
+body:not(.awake) .hint{opacity:0;pointer-events:none}
 body.awake .brand,body.awake .dock,body.awake .hint{opacity:1;transition:opacity .5s ease}
 .brand{left:28px;top:22px;animation:brandIn 1.4s ease both}
 .brand::before{content:"";position:absolute;left:-70px;top:-60px;right:-110px;bottom:-50px;z-index:-1;pointer-events:none;
@@ -194,33 +194,49 @@ details.more summary::-webkit-details-marker{display:none}
  background:conic-gradient(var(--accent) calc(var(--p,0)*360deg),color-mix(in srgb,var(--accent) 22%,transparent) 0);
  -webkit-mask:radial-gradient(circle,transparent 13px,#000 14px);mask:radial-gradient(circle,transparent 13px,#000 14px)}
 
-.invite{left:28px;bottom:26px;display:flex;align-items:center;gap:12px;padding:6px 6px 6px 16px;border-radius:999px;
- background:var(--glass-strong);border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:var(--shadow);
- opacity:0;transform:translateY(8px);transition:opacity .8s ease,transform .8s ease}
-.invite.on{opacity:1;transform:none}
-.invite .it{display:flex;flex-direction:column;gap:3px;font-size:13.5px;color:var(--ink);line-height:1.15}
-.invite .it small{font-size:11.5px;color:var(--mute)}
-.invite .ig{border:0;border-radius:999px;padding:9px 16px;background:var(--accent);color:var(--on-accent);font-size:13px;cursor:pointer;white-space:nowrap}
-.invite .ig:hover,.invite .ig:focus-visible{filter:brightness(1.08);outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
-.invite .ix{width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--mute);cursor:pointer;font-size:17px;line-height:1}
-.invite .ix:hover{color:var(--ink);background:var(--faint)}
-/* призрачная рука показывает жест, пока кисть рисует сама */
-.ghost{position:fixed;z-index:1;left:0;top:0;width:300px;height:320px;pointer-events:none;opacity:0;transition:opacity 1s ease;will-change:transform}
-.ghost.on{opacity:1}
-#dHands.pulse{animation:handPulse 1.6s ease-out 3}
-@keyframes handPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
-.bare .ui,.bare .ghost,.bare .tip,.bare .cam,.bare .recpill{display:none!important}
+.bare .ui,.bare .welcome,.bare .tip,.bare .cam,.bare .recpill{display:none!important}
+.welcome{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:20px;cursor:default;
+ background:color-mix(in srgb,var(--bg) 45%,transparent);opacity:0;transition:opacity .45s ease}
+.welcome.on{opacity:1}
+.wcard{width:min(520px,100%);max-height:calc(100dvh - 40px);overflow-y:auto;background:var(--glass-strong);border:1px solid var(--line);
+ border-radius:22px;box-shadow:var(--shadow);padding:22px 22px 18px;transform:translateY(12px);transition:transform .45s ease}
+.welcome.on .wcard{transform:none}
+.whead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.wname{font:600 30px/1 'Fraunces',Georgia,serif;color:var(--ink)}
+.wtag{margin-top:9px;font-size:13px;color:var(--mute)}
+.seg{display:inline-flex;flex:none;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--mute);font-size:12px;letter-spacing:.08em;padding:6px 12px;border-radius:999px;cursor:pointer}
+.seg button:hover{color:var(--ink)}
+.seg button.cur{background:var(--ink);color:var(--bg)}
+.wlist{list-style:none;margin:16px 0 0;padding:0}
+.wlist li{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.wi{width:40px;height:40px;border-radius:12px;background:var(--faint);display:grid;place-items:center;color:var(--ink)}
+.wi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.wlist b{display:block;font-weight:400;font-size:14.5px;color:var(--ink)}
+.wlist p{margin:3px 0 0;font-size:12.5px;line-height:1.4;color:var(--mute)}
+.wact{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:8px 14px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.wact:hover,.wact:focus-visible{border-color:var(--ink);outline:none}
+.wact.on{border-color:var(--accent);color:var(--accent)}
+.wtip{margin:4px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45;color:var(--ink);opacity:.82}
+.wpriv{margin:6px 0 0;font-size:11.5px;line-height:1.4;color:var(--mute)}
+.wfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.chk{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;color:var(--mute);cursor:pointer}
+.chk input{width:16px;height:16px;margin:0;accent-color:var(--accent);cursor:pointer}
+.wgo{border:0;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:14px;padding:11px 24px;cursor:pointer}
+.wgo:hover,.wgo:focus-visible{filter:brightness(1.08);outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
+.toast{z-index:6}
 .err{position:fixed;inset:0;display:none;place-items:center;text-align:center;color:var(--mute);padding:40px}
 @media (max-width:600px){
  .name{font-size:26px}.hint{display:none}
- .dock{right:50%;transform:translateX(50%);bottom:12px;padding:4px}.dock button{width:56px;height:52px;gap:5px}.dock .lbl{font-size:9.5px}#dTheme,#dMic,#dHands,.dock .sep{display:none}
+ .dock{right:50%;transform:translateX(50%);bottom:12px;padding:4px}.dock button{width:49px;height:52px;gap:5px}.dock .lbl{font-size:9.5px}#dTheme,#dMic,#dHands,.dock .sep{display:none}
  .mobile-only{display:flex!important}
- .invite{left:10px;right:10px;bottom:84px}.invite .it{flex:1}
+
  .sheet,.pop{right:10px;left:10px;width:auto;bottom:82px}
  .cam{width:150px;left:10px;bottom:86px}.legend,.private{display:none}
  .toast{bottom:88px}
+ .wlist li{grid-template-columns:40px 1fr}.wact{grid-column:2;justify-self:start}.wname{font-size:26px}.wcard{padding:18px 16px 14px}
 }
-@media (prefers-reduced-motion:reduce){.brand{animation:none}#dHands.pulse{animation:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
+@media (prefers-reduced-motion:reduce){.brand{animation:none}.welcome,.wcard{transition:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Inkfall","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"author":{"@type":"Organization","name":"voidstudio","url":"https://voidstudio.top"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"A GPU fluid simulation in your browser. Move the pointer, or your hands in front of the camera, and ink blooms through water."}
@@ -235,10 +251,17 @@ const DICT={
 en:{
  name:"Inkfall", tagline:"slow fluid dynamics", credit:"by voidstudio.top",
  hint:"Move the pointer to release ink. Click to drop a bead, right-click to change colour.",
- inv_hands:"✋ Paint with your hands", inv_hands_sub:"your video is never sent anywhere", inv_try:"Try it",
- inv_sound:"♪ The sound of water", inv_sound_sub:"quiet, synthesized live", inv_on:"Turn on", inv_close:"not now",
  d_colour:"next colour (right-click)", d_clear:"clear the water (C)", d_theme:"light or dark (T)", d_sound:"sound (S)",
  d_hands:"control with your hands (H)", d_capture:"photo or video (R)", d_settings:"settings",
+ l_help:"Help", d_help:"how to play (?)",
+ w_tag:"ink in water that answers you",
+ w_pt:"Mouse or finger", w_pt_t:"Move to release ink. Click to drop a bead, right-click for a new colour.",
+ w_hands:"Your hands", w_hands_t:"Show a hand to the camera: pinch to paint, open palm to stir, ✌ for a new colour.", w_hands_b:"Turn on camera",
+ w_mic:"Microphone", w_mic_t:"Clap, speak or play music, and the sound drops ink into the water.", w_mic_b:"Turn on", w_mic_on:"Mic on",
+ w_snd:"Sound", w_snd_t:"Quiet water sounds, made live while you paint.", w_snd_b:"Turn on", w_snd_on:"Sound on",
+ w_tip:"Random gives a fresh character and colour. Colours, clearing, settings and capture are in the bar at the bottom.",
+ w_priv:"Camera and microphone are processed right in your browser and never sent anywhere.",
+ w_hide:"Don’t show at start", w_go:"Start",
  l_random:"Random", l_mic:"Mic", d_random:"clean water, new character and colour (X)", d_mic:"microphone (M)", t_today:"Now: %s", t_mic_off:"microphone off",
  l_colour:"Colour", l_clear:"Clear", l_theme:"Theme", l_sound:"Sound", l_hands:"Hands", l_capture:"Capture", l_settings:"Settings",
  desc_tush:"Classic ink: blooms, then slowly sinks.", desc_silk:"Fine curling threads that barely sink.", desc_smoke:"Soft and light: drifts upward.",
@@ -256,7 +279,7 @@ en:{
  mic:"microphone", mic_on:"microphone on", sys:"system audio", sys_on:"system audio on",
  h_capture:"Video", l_length:"Length", o_untilstop:"until I stop", sec10:"10 seconds", sec30:"30 seconds", sec60:"60 seconds", l_format:"Format",
  h_misc:"Screen", b_fs:"fullscreen", lang_other:"Русский",
- keys:"Keys: X random · C clear · T theme · S sound · M mic · H hands · R record · P pause · F fullscreen",
+ keys:"Keys: ? help · X random · C clear · T theme · S sound · M mic · H hands · R record · P pause · F fullscreen",
  c_photo:"Photo", c_video:"Record video", l_size:"Size", o_win:"as window",
  rec:"rec", rec_paused:"paused", rec_pause:"pause", rec_resume:"resume", rec_stop:"stop and save",
  rec_saved:"video saved", photo_saved:"photo saved", preparing:"preparing…",
@@ -280,10 +303,17 @@ en:{
 ru:{
  name:"Inkfall", tagline:"медленная гидродинамика", credit:"сделано в voidstudio.top",
  hint:"Веди мышью, чтобы пустить тушь. Клик роняет каплю, правая кнопка меняет цвет.",
- inv_hands:"✋ Рисуй руками", inv_hands_sub:"видео никуда не отправляется", inv_try:"Попробовать",
- inv_sound:"♪ Звук воды", inv_sound_sub:"тихий, синтезируется на лету", inv_on:"Включить", inv_close:"не сейчас",
  d_colour:"следующий цвет (правая кнопка)", d_clear:"очистить воду (C)", d_theme:"светлая или тёмная (T)", d_sound:"звук (S)",
  d_hands:"управление руками (H)", d_capture:"фото или видео (R)", d_settings:"настройки",
+ l_help:"Помощь", d_help:"как играть (?)",
+ w_tag:"тушь в воде, которая отвечает тебе",
+ w_pt:"Мышь или палец", w_pt_t:"Веди — пойдёт тушь. Клик роняет каплю, правая кнопка меняет цвет.",
+ w_hands:"Руки", w_hands_t:"Покажи руку камере: щипок рисует, ладонь размешивает, ✌ меняет цвет.", w_hands_b:"Включить камеру",
+ w_mic:"Микрофон", w_mic_t:"Хлопни, скажи что-нибудь или включи музыку — звук роняет тушь в воду.", w_mic_b:"Включить", w_mic_on:"Микрофон вкл",
+ w_snd:"Звук", w_snd_t:"Тихий звук воды, рождается прямо во время рисования.", w_snd_b:"Включить", w_snd_on:"Звук вкл",
+ w_tip:"«Случайно» даёт новый характер и цвет. Цвета, очистка, настройки и съёмка — на панели внизу.",
+ w_priv:"Камера и микрофон обрабатываются прямо в браузере и никуда не отправляются.",
+ w_hide:"Не показывать при запуске", w_go:"Начать",
  l_random:"Случайно", l_mic:"Микрофон", d_random:"чистая вода, новый характер и цвет (X)", d_mic:"микрофон (M)", t_today:"Сейчас: %s", t_mic_off:"микрофон выключен",
  l_colour:"Цвет", l_clear:"Очистить", l_theme:"Тема", l_sound:"Звук", l_hands:"Руки", l_capture:"Съёмка", l_settings:"Настройки",
  desc_tush:"Классическая тушь: распускается и медленно оседает.", desc_silk:"Тонкие вьющиеся нити, почти не тонут.", desc_smoke:"Мягкая и лёгкая: поднимается вверх.",
@@ -301,7 +331,7 @@ ru:{
  mic:"микрофон", mic_on:"микрофон вкл", sys:"звук системы", sys_on:"звук системы вкл",
  h_capture:"Видео", l_length:"Длина", o_untilstop:"пока не остановлю", sec10:"10 секунд", sec30:"30 секунд", sec60:"60 секунд", l_format:"Формат",
  h_misc:"Экран", b_fs:"во весь экран", lang_other:"English",
- keys:"Клавиши: X случайно · C очистить · T тема · S звук · M микрофон · H руки · R запись · P пауза · F весь экран",
+ keys:"Клавиши: ? помощь · X случайно · C очистить · T тема · S звук · M микрофон · H руки · R запись · P пауза · F весь экран",
  c_photo:"Фото", c_video:"Записать видео", l_size:"Размер", o_win:"как окно",
  rec:"запись", rec_paused:"пауза", rec_pause:"пауза", rec_resume:"продолжить", rec_stop:"остановить и сохранить",
  rec_saved:"видео сохранено", photo_saved:"фото сохранено", preparing:"готовлю…",
@@ -331,14 +361,13 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 </head>
 <body class="awake">
 <canvas id="c"></canvas>
-<canvas class="ghost" id="ghost" aria-hidden="true"></canvas>
 <div class="ui brand" id="brand">
   <div class="name"><span class="ttl" data-i18n="name"></span><span class="sub" data-i18n="tagline"></span></div>
   <a class="credit" href="https://voidstudio.top" target="_blank" rel="noopener"><img src="assets/voidstudio-cat.png" alt=""><span data-i18n="credit"></span></a>
 </div>
 <div class="ui hint" id="hint" data-i18n="hint"></div>
 <div class="ui toast" id="toast" role="status" aria-live="polite"></div>
-<div class="ui invite" id="invite" role="dialog" hidden><span class="it"><b id="invTitle"></b><small id="invSub"></small></span><button class="ig" id="invGo"></button><button class="ix" id="invX" data-i18n-title="inv_close">×</button></div>
+
 
 <nav class="ui fade dock" id="dock">
   <button id="dColour" data-i18n-title="d_colour"><span class="dot" id="dot"></span><span class="lbl" data-i18n="l_colour"></span></button>
@@ -352,6 +381,7 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
   <button id="dTheme" data-i18n-title="d_theme"><svg viewBox="0 0 24 24"><g class="i-moon"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></g><g class="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></g></svg><span class="lbl" data-i18n="l_theme"></span></button>
   <button id="dCapture" data-i18n-title="d_capture"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6" fill="currentColor" stroke="none"/></svg><span class="lbl" data-i18n="l_capture"></span></button>
   <button id="dSettings" data-i18n-title="d_settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/></svg><span class="lbl" data-i18n="l_settings"></span></button>
+  <button id="dHelp" data-i18n-title="d_help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.7 9.4a2.4 2.4 0 0 1 4.6.9c0 1.7-2.3 2-2.3 3.5"/><circle cx="12" cy="17" r=".7" fill="currentColor" stroke="none"/></svg><span class="lbl" data-i18n="l_help"></span></button>
 </nav>
 
 <div class="ui sheet" id="sheet" hidden>
@@ -414,6 +444,26 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
   <p class="private" data-i18n="h_private"></p>
 </div>
 <div class="tip" id="tip0" hidden></div><div class="tip" id="tip1" hidden></div>
+<div class="welcome" id="welcome" hidden>
+  <div class="wcard" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+    <div class="whead">
+      <div><div class="wname" id="wTitle">Inkfall</div><div class="wtag" data-i18n="w_tag"></div></div>
+      <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
+    </div>
+    <ul class="wlist">
+      <li><span class="wi"><svg viewBox="0 0 24 24"><path d="M6 3.5l12 7-5.2 1.3L10 17z"/><path d="M13 12l4.5 6"/></svg></span><div><b data-i18n="w_pt"></b><p data-i18n="w_pt_t"></p></div></li>
+      <li id="wHandsRow"><span class="wi"><svg viewBox="0 0 24 24"><path d="M8 12.5V5.5a1.5 1.5 0 0 1 3 0V11M11 10.5V4a1.5 1.5 0 0 1 3 0v6.5M14 10.5V5.5a1.5 1.5 0 0 1 3 0V12M17 9a1.5 1.5 0 0 1 3 0v5.5a7 7 0 0 1-7 7h-.8a7 7 0 0 1-5.6-2.8l-2.3-3.1a1.6 1.6 0 0 1 2.4-2.1L8 15"/></svg></span><div><b data-i18n="w_hands"></b><p data-i18n="w_hands_t"></p></div><button class="wact" id="wHands" data-i18n="w_hands_b"></button></li>
+      <li><span class="wi"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></span><div><b data-i18n="w_mic"></b><p data-i18n="w_mic_t"></p></div><button class="wact" id="wMic"></button></li>
+      <li><span class="wi"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></span><div><b data-i18n="w_snd"></b><p data-i18n="w_snd_t"></p></div><button class="wact" id="wSnd"></button></li>
+    </ul>
+    <p class="wtip" data-i18n="w_tip"></p>
+    <p class="wpriv" data-i18n="w_priv"></p>
+    <div class="wfoot">
+      <label class="chk"><input type="checkbox" id="wHide"><span data-i18n="w_hide"></span></label>
+      <button class="wgo" id="wGo" data-i18n="w_go"></button>
+    </div>
+  </div>
+</div>
 <div class="err" id="err" data-i18n="err"></div>
 
 <script>
@@ -637,7 +687,7 @@ const AWAKE_MS=5000;
 let lastActive=performance.now(),moveAcc=0,mvx=null,mvy=null,lastDrop=0,nextDrop=1500,tsec=0;
 function pos(e){return[e.clientX/innerWidth,e.clientY/innerHeight]}
 function wake(){lastActive=performance.now();moveAcc=0}
-const overUI=e=>e.target.closest&&e.target.closest('.ui,.cam,.recpill');
+const overUI=e=>e.target.closest&&e.target.closest('.ui,.cam,.recpill,.welcome');
 addEventListener('contextmenu',e=>{if(!overUI(e))e.preventDefault()});
 const ptrs=new Map();
 addEventListener('pointerdown',e=>{if(overUI(e))return;const[x,y]=pos(e);wake();
@@ -660,40 +710,9 @@ addEventListener('wheel',wake,{passive:true});
 
 // ---------- autopilot brush ----------
 const ap={x:.5,y:.5,seed:Math.random()*100,init:false};
-function autopilot(t,dt,demo){const s=ap.seed;const x=.5+.34*Math.sin(t*.17+s)+.11*Math.sin(t*.43+s*2.1),y=.5+.3*Math.cos(t*.21+s*3)+.1*Math.sin(t*.57+s);
- if(ap.init){const dx=(x-ap.x)*6000,dy=-(y-ap.y)*6000,sp=Math.hypot(dx,dy);
-  // с призрачной рукой тушь идёт только при сжатых пальцах — ровно как в настоящем режиме
-  if(!demo){stroke(x,y,dx*.9,dy*.9,false,t,Math.min(.5,sp/120));swish(sp*.5,x,y)}
-  else if(demo.paint){stroke(x,y,dx*.9,dy*.9,false,t,.95);swish(sp,x,y)}}
+function autopilot(t,dt){const s=ap.seed;const x=.5+.34*Math.sin(t*.17+s)+.11*Math.sin(t*.43+s*2.1),y=.5+.3*Math.cos(t*.21+s*3)+.1*Math.sin(t*.57+s);
+ if(ap.init){const dx=(x-ap.x)*6000,dy=-(y-ap.y)*6000,sp=Math.hypot(dx,dy);stroke(x,y,dx*.9,dy*.9,false,t,Math.min(.5,sp/120));swish(sp*.5,x,y)}
  ap.x=x;ap.y=y;ap.init=true}
-// Призрачная рука: те же 21 точка, что отдаёт камера. Две позы, между ними — щипок.
-const GH_OPEN=[[.50,.90],[.43,.84],[.37,.77],[.33,.70],[.30,.63],[.42,.62],[.40,.52],[.39,.45],[.38,.39],[.49,.60],[.49,.49],[.49,.42],[.49,.35],[.56,.62],[.575,.52],[.585,.46],[.59,.40],[.62,.66],[.65,.585],[.665,.535],[.68,.49]];
-const GH_PINCH=GH_OPEN.map(p=>p.slice());
-[[2,.38,.76],[3,.35,.68],[4,.345,.565],[6,.395,.535],[7,.36,.51],[8,.345,.55],[12,.495,.34],[16,.60,.395],[20,.70,.485]].forEach(([i,x,y])=>{GH_PINCH[i]=[x,y]});
-const ghost={el:null,cx:null,on:false,clock:0,left:45000,last:-1,theme:''};
-function ghostPinch(c){const u=c%3.6;return u<.45?u/.45:u<2.55?1:u<3?1-(u-2.55)/.45:0}
-function drawGhost(t){const g=ghost;if(!g.cx){g.el=$('ghost');g.cx=g.el.getContext('2d')}
- const d=Math.min(2,devicePixelRatio||1),W=300,H=320;if(g.el.width!==W*d){g.el.width=W*d;g.el.height=H*d}
- const c=g.cx;c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,W,H);
- const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
- const P=GH_OPEN.map((p,i)=>[p[0]+(GH_PINCH[i][0]-p[0])*e,p[1]+(GH_PINCH[i][1]-p[1])*e]);
- const ax=(P[4][0]+P[8][0])/2,ay=(P[4][1]+P[8][1])/2,A=-.18,ca=Math.cos(A),sa=Math.sin(A),K=360;
- const tr=p=>{const dx=(p[0]-ax)*K,dy=(p[1]-ay)*K;return[90+dx*ca-dy*sa,92+dx*sa+dy*ca]};
- const light=THEME==='light',rgb=light?'30,29,35':'255,255,255';
- c.lineCap=c.lineJoin='round';
- const path=()=>{c.beginPath();HAND_LINKS.forEach(([a,b])=>{const p=tr(P[a]),q=tr(P[b]);c.moveTo(p[0],p[1]);c.lineTo(q[0],q[1])})};
- path();c.strokeStyle=`rgba(${rgb},.09)`;c.lineWidth=20;c.stroke();
- path();c.strokeStyle=`rgba(${rgb},.6)`;c.lineWidth=2.2;c.stroke();
- P.forEach((p,i)=>{const q=tr(p);c.beginPath();c.arc(q[0],q[1],i===4||i===8?4.6:2.4,0,7);
-  c.fillStyle=(i===4||i===8)&&e>.8?getComputedStyle(document.documentElement).getPropertyValue('--accent'):`rgba(${rgb},.8)`;c.fill()})}
-function ghostTick(active,real){const g=ghost;
- if(active){g.left-=real*1000;g.clock+=real}
- if(active!==g.on){g.on=active;$('ghost').classList.toggle('on',active);if(active)g.last=-1}
- if(!active)return null;
- const pinch=ghostPinch(g.clock);
- if(Math.abs(pinch-g.last)>.01||g.theme!==THEME){g.last=pinch;g.theme=THEME;drawGhost(pinch)}
- $('ghost').style.transform=`translate(${ap.x*innerWidth-90}px,${ap.y*innerHeight-92}px)`;
- return{paint:pinch>.85}}
 
 // ---------- sound ----------
 let ac=null,on=false,master,bus,swishGain,swishFilter,swishPan,swishLevel=0,swishPos=[.5,.5],lastBubble=0;
@@ -740,29 +759,7 @@ function ensureAudio(){if(!ac)initAudio();if(ac.state==='suspended')ac.resume()}
 function setSound(v){ensureAudio();on=v;master.gain.setTargetAtTime(on?S.vol:0,ac.currentTime,.6);$('dSound').classList.toggle('on',on);$('dSound').setAttribute('aria-pressed',on)}
 
 $('dSound').onclick=()=>{setSound(!on);toast(T(on?'t_sound_on':'t_sound_off'))};
-// приглашения по очереди: сначала руки (если есть камера и это не телефон), потом звук. Каждое — один раз.
-const TOUR=QP.has('tour');
-const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=k=>{try{localStorage.setItem(k,'1')}catch(e){}};
-let handsUsed=!TOUR&&!!lsGet('inkfall-hands-used'),invQueue=[],invKind=null,invTimer=0;
-async function hasCamera(){try{return(await navigator.mediaDevices.enumerateDevices()).some(d=>d.kind==='videoinput')}catch(e){return false}}
-function openInvite(kind){
- if(kind==='hands'&&(hands||handsUsed)||kind==='sound'&&on){lsSet('inkfall-'+kind+'-seen');nextInvite(0);return}
- invKind=kind;$('invTitle').textContent=T('inv_'+kind);$('invSub').textContent=T('inv_'+kind+'_sub');
- $('invGo').textContent=T(kind==='hands'?'inv_try':'inv_on');
- $('invite').hidden=false;document.body.classList.add('inviting');requestAnimationFrame(()=>$('invite').classList.add('on'));
- if(kind==='hands')pulseHands();
- clearTimeout(invTimer);invTimer=setTimeout(()=>hideInvite(),22000)}
-function hideInvite(){if(!invKind)return;lsSet('inkfall-'+invKind+'-seen');invKind=null;clearTimeout(invTimer);
- $('invite').classList.remove('on');document.body.classList.remove('inviting');setTimeout(()=>{if(!invKind)$('invite').hidden=true},900);nextInvite(15000)}
-function nextInvite(delay){const k=invQueue.shift();if(k)setTimeout(()=>openInvite(k),delay)}
-$('invGo').onclick=()=>{const k=invKind;hideInvite();if(k==='hands')startHands();else{setSound(true);toast(T('t_sound_on'))}};
-$('invX').onclick=hideInvite;
-function pulseHands(){const b=$('dHands');b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse')}
-$('dHands').addEventListener('animationend',()=>$('dHands').classList.remove('pulse'));
-(async()=>{if(bare)return;
- if(!coarse&&(TOUR||!lsGet('inkfall-hands-seen'))&&!handsUsed&&await hasCamera()){invQueue.push('hands');setTimeout(pulseHands,1400)}
- if(TOUR||!lsGet('inkfall-sound-seen'))invQueue.push('sound');
- nextInvite(AWAKE_MS+700)})();
+
 
 // ---------- listening: microphone or system audio ----------
 let listen=null,micBase={low:0,high:0,all:0},lastLow=0,lastHigh=0;
@@ -850,7 +847,7 @@ async function startHands(){
   try{H.lm=await vision.HandLandmarker.createFromOptions(files,opts('GPU'))}
   catch(e){H.lm=await vision.HandLandmarker.createFromOptions(files,opts('CPU'))}
   if(H.stopped){H.lm.close();return}
-  camStatus('h_show');loopHands(H);handsUsed=true;lsSet('inkfall-hands-used');if(invKind==='hands')hideInvite();
+  camStatus('h_show');loopHands(H);
  }catch(e){console.warn('hands:',e);if(!H.stopped)camStatus(handErr(e))}}
 function loopHands(H){const v=H.video;
  const tick=()=>{if(H.stopped)return;
@@ -930,7 +927,7 @@ $('dColour').onclick=nextInk;
 if(!document.documentElement.requestFullscreen)$('fs').style.display='none';
 $('fs').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{})};
 $('langBtn').onclick=()=>{LANG=LANG==='ru'?'en':'ru';try{localStorage.setItem('inkfall-lang',LANG)}catch(e){}applyLang()};
-addEventListener('keydown',e=>{wake();if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'||e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key.toLowerCase();
+addEventListener('keydown',e=>{wake();if(welcomeOpen){if(e.key==='Escape')closeWelcome();return}if(e.key==='?'){openWelcome();return}if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'||e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key.toLowerCase();
  if(k==='c')calm();else if(k==='t')$('dTheme').click();else if(k==='s')$('dSound').click();else if(k==='h')startHands();
  else if(k==='f')$('fs').click();else if(k==='x')shuffleLook();else if(k==='m')$('dMic').click();else if(k==='r'){rec?stopRec():startRec()}else if(k==='p')pauseRec();
  else if(e.key==='Escape')openSheet(null)});
@@ -949,6 +946,31 @@ function shuffleLook(){wake();
  toast(T('o_'+k)+' · '+inkName(ci)+' · '+T('desc_'+k));
  setTimeout(demoLook,850)}
 $('dRandom').onclick=shuffleLook;
+
+// ---------- welcome ----------
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+async function hasCamera(){try{return(await navigator.mediaDevices.enumerateDevices()).some(d=>d.kind==='videoinput')}catch(e){return false}}
+let welcomeOpen=false,wTimer=0,pendingToast=null;
+function renderWelcome(){const micOn=$('dMic').classList.contains('on');
+ $('wMic').textContent=T(micOn?'w_mic_on':'w_mic_b');$('wMic').classList.toggle('on',micOn);
+ $('wSnd').textContent=T(on?'w_snd_on':'w_snd_b');$('wSnd').classList.toggle('on',on);
+ document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('cur',b.dataset.lang===LANG))}
+function openWelcome(){if(welcomeOpen)return;welcomeOpen=true;openSheet(null);
+ $('wHide').checked=!!lsGet('inkfall-welcome-off');$('welcome').hidden=false;
+ requestAnimationFrame(()=>$('welcome').classList.add('on'));renderWelcome();
+ clearInterval(wTimer);wTimer=setInterval(renderWelcome,400);setTimeout(()=>$('wGo').focus({preventScroll:true}),60)}
+function closeWelcome(){if(!welcomeOpen)return;welcomeOpen=false;clearInterval(wTimer);
+ try{if($('wHide').checked)localStorage.setItem('inkfall-welcome-off','1');else localStorage.removeItem('inkfall-welcome-off')}catch(e){}
+ $('welcome').classList.remove('on');setTimeout(()=>{if(!welcomeOpen)$('welcome').hidden=true},460);wake();
+ if(pendingToast){const m=pendingToast;pendingToast=null;setTimeout(()=>toast(m),500)}}
+$('wGo').onclick=closeWelcome;
+$('welcome').addEventListener('pointerdown',e=>{if(e.target===$('welcome'))closeWelcome()});
+$('wSnd').onclick=()=>{setSound(!on);renderWelcome()};
+$('wMic').onclick=()=>{$('dMic').click();setTimeout(renderWelcome,250)};
+$('wHands').onclick=()=>{closeWelcome();startHands()};
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{LANG=b.dataset.lang;try{localStorage.setItem('inkfall-lang',LANG)}catch(e){}applyLang()});
+$('dHelp').onclick=openWelcome;
+if(coarse)$('wHandsRow').hidden=true;else hasCamera().then(c=>{if(!c)$('wHandsRow').hidden=true});
 $('mTheme').onclick=()=>$('dTheme').click();$('mMic').onclick=()=>{openSheet(null);$('dMic').click()};$('mHands').onclick=()=>$('dHands').click();
 // сразу показываем характер на свежей капле и мазке, иначе разницу не заметить
 function demoLook(){wake();drop(.5,.36,.009,tsec);
@@ -1050,9 +1072,7 @@ document.addEventListener('visibilitychange',()=>{if(!ac)return;master.gain.setT
 let lastDot='';
 function frame(now){const real=Math.min((now-last)/1000,1/30);last=now;tsec=now/1000;const dt=real*S.speed;
  const awake=now-lastActive<AWAKE_MS||!!openWhich;document.body.classList.toggle('awake',awake);
- const piloting=S.auto==='always'||(S.auto==='idle'&&!awake);
- const demo=ghostTick(piloting&&!awake&&!handsUsed&&!coarse&&!bare&&ghost.left>0,real);
- if(piloting)autopilot(tsec,real,demo);else ap.init=false;
+ if(S.auto==='always'||(S.auto==='idle'&&!awake))autopilot(tsec,real);else ap.init=false;
  if(S.drops==='on'&&!reduced&&!awake&&now-lastDrop>nextDrop){lastDrop=now;nextDrop=2200+Math.random()*3500;drop(.15+Math.random()*.7,.15+Math.random()*.7,.003+Math.random()*.004,tsec)}
  micTick(now);
  while(queue.length){const s=queue.shift();splat(s.x,s.y,s.dx,s.dy,s.c,s.rad)}
@@ -1078,10 +1098,11 @@ function applyLang(){
  document.querySelectorAll('[data-i18n-title]').forEach(e=>{e.title=T(e.dataset.i18nTitle);e.setAttribute('aria-label',T(e.dataset.i18nTitle))});
  if(!listen){$('mic').textContent=T('mic');$('sys').textContent=T('sys')}
  $('pNote').textContent=T(pNoteKey);$('micNote').textContent=T(noteKey);
- if(hands){const k=camKey;camKey='';camStatus(k)}recLabels();paint()}
+ if(hands){const k=camKey;camKey='';camStatus(k)}recLabels();paint();if(welcomeOpen)renderWelcome()}
 applyLang();
 booted=true;
-if(startLook&&!bare)setTimeout(()=>toast(T('t_today').replace('%s',T('o_'+startLook))+' · '+T('desc_'+startLook)),1400);
+if(!bare&&(QP.has('tour')||!lsGet('inkfall-welcome-off')))setTimeout(openWelcome,650);
+if(startLook&&!bare)setTimeout(()=>{const m=T('t_today').replace('%s',T('o_'+startLook))+' · '+T('desc_'+startLook);if(welcomeOpen)pendingToast=m;else toast(m)},1400);
 </script>
 </body>
 </html>

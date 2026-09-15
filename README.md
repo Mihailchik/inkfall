@@ -33,6 +33,7 @@ back, and the edge of every bloom darkens the way wet sumi does.
 | Sound, microphone | **Sound**, **Mic** | S, M |
 | Hand control | **Hands** | H |
 | Photo, video | **Capture** | R to record, P to pause |
+| How to play | **Help** | ? |
 
 Several fingers paint several lines at once. For five seconds after any click, key
 or noticeable movement the title, the dock and the hint stay lit; then they fade
@@ -69,11 +70,9 @@ Press **Hands**, allow the camera, and hold one hand up.
 
 The camera image is processed on your device and never uploaded.
 
-First-time visitors are shown that this exists before they find the button. While the brush paints
-on its own, a translucent hand skeleton rides it and pinches whenever ink flows, using the same 21
-points and the same pinch the camera recognises. When the opening lights go out, a one-time invite
-offers to try it, only on devices that have a camera and not on phones, and the Hands button pulses.
-The camera is never requested until the visitor asks. Add `?tour` to see the hints again.
+A welcome window at start explains the ways to play and turns on the camera, microphone or sound in
+place, with a language switch at the top. Ticking “Don’t show at start” is remembered; **Help** in the
+bar or the `?` key opens it again, and `?tour` forces it.
 
 ### Capture
 
