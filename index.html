@@ -52,25 +52,25 @@ body{color:var(--ink);font:300 14px/1.5 'Jost',system-ui,sans-serif;cursor:cross
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button{font:inherit;color:inherit}
-.ui{position:fixed;z-index:2;user-select:none;transition:opacity 1.6s}
-body.idle .ui.fade{opacity:.12}
-.brand{left:28px;top:22px;transition:opacity 3.2s ease;animation:brandIn 1.4s ease both}
+.ui{position:fixed;z-index:2;user-select:none;transition:opacity 1.8s ease}
+/* один переключатель на всё: пока человек что-то делает — горит, потом всё вместе гаснет */
+body:not(.awake) .brand,body:not(.awake) .dock{opacity:.1}
+body:not(.awake) .hint,body.inviting .hint{opacity:0;pointer-events:none}
+body.awake .brand,body.awake .dock,body.awake .hint{opacity:1;transition:opacity .5s ease}
+.brand{left:28px;top:22px;animation:brandIn 1.4s ease both}
 .brand::before{content:"";position:absolute;left:-70px;top:-60px;right:-110px;bottom:-50px;z-index:-1;pointer-events:none;
  background:radial-gradient(closest-side,color-mix(in srgb,var(--bg) 82%,transparent),transparent);opacity:0;transition:opacity 1.2s}
-body:not(.lit) .brand{opacity:.16}
-body.lit .brand{opacity:1;transition:opacity .6s ease}
-body.lit .brand::before{opacity:1}
+body.awake .brand::before{opacity:1}
 .name{font:600 34px/1 'Fraunces',Georgia,serif;letter-spacing:.005em}
 .name .ttl{display:block;transition:text-shadow 1.2s}
-body.lit .name .ttl{text-shadow:0 0 26px color-mix(in srgb,var(--accent) 60%,transparent),0 0 4px color-mix(in srgb,var(--accent) 35%,transparent)}
+body.awake .name .ttl{text-shadow:0 0 26px color-mix(in srgb,var(--accent) 60%,transparent),0 0 4px color-mix(in srgb,var(--accent) 35%,transparent)}
 .name .sub{display:block;font:300 11px/1.6 'Jost',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--mute);margin-top:10px}
 .credit{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font:300 12px/1 'Jost',sans-serif;letter-spacing:.1em;color:var(--mute);text-decoration:none;transition:color .3s}
 .credit img{width:20px;height:20px;display:block}
 :root[data-theme="light"] .credit img{filter:invert(1) brightness(.25)}
 .credit:hover,.credit:focus-visible{color:var(--accent);outline:none}
 @keyframes brandIn{from{opacity:0;filter:blur(6px);transform:translateY(6px)}}
-.hint{left:28px;bottom:26px;color:var(--mute);letter-spacing:.04em;max-width:46ch;transition:opacity 1.2s}
-.hint.gone{opacity:0;pointer-events:none}
+.hint{left:28px;bottom:26px;color:var(--mute);letter-spacing:.04em;max-width:46ch}
 .toast{left:50%;bottom:104px;transform:translateX(-50%);color:var(--ink);background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 14px;
  letter-spacing:.18em;text-transform:uppercase;font-size:11px;white-space:nowrap;opacity:0;transition:opacity .35s;pointer-events:none}
 .toast.long{white-space:normal;text-transform:none;letter-spacing:.02em;font-size:13px;line-height:1.35;text-align:center;width:max-content;max-width:min(88vw,460px);border-radius:14px;padding:9px 16px}
@@ -227,7 +227,7 @@ en:{
  invite:"♪ turn on the water",
  d_colour:"next colour (right-click)", d_clear:"clear the water (C)", d_theme:"light or dark (T)", d_sound:"sound (S)",
  d_hands:"control with your hands (H)", d_capture:"photo or video (R)", d_settings:"settings",
- l_random:"Random", l_mic:"Mic", d_random:"random character (X)", d_mic:"microphone (M)", t_today:"Now: %s", t_mic_off:"microphone off",
+ l_random:"Random", l_mic:"Mic", d_random:"clean water, new character and colour (X)", d_mic:"microphone (M)", t_today:"Now: %s", t_mic_off:"microphone off",
  l_colour:"Colour", l_clear:"Clear", l_theme:"Theme", l_sound:"Sound", l_hands:"Hands", l_capture:"Capture", l_settings:"Settings",
  desc_tush:"Classic ink: blooms, then slowly sinks.", desc_silk:"Fine curling threads that barely sink.", desc_smoke:"Soft and light: drifts upward.",
  desc_oil:"Thick and heavy: falls fast with hard edges.", desc_water:"Pale washes that spread wide.", desc_dust:"Tiny grains swept into whirls.",
@@ -271,7 +271,7 @@ ru:{
  invite:"♪ включить звук воды",
  d_colour:"следующий цвет (правая кнопка)", d_clear:"очистить воду (C)", d_theme:"светлая или тёмная (T)", d_sound:"звук (S)",
  d_hands:"управление руками (H)", d_capture:"фото или видео (R)", d_settings:"настройки",
- l_random:"Случайно", l_mic:"Микрофон", d_random:"случайный характер (X)", d_mic:"микрофон (M)", t_today:"Сейчас: %s", t_mic_off:"микрофон выключен",
+ l_random:"Случайно", l_mic:"Микрофон", d_random:"чистая вода, новый характер и цвет (X)", d_mic:"микрофон (M)", t_today:"Сейчас: %s", t_mic_off:"микрофон выключен",
  l_colour:"Цвет", l_clear:"Очистить", l_theme:"Тема", l_sound:"Звук", l_hands:"Руки", l_capture:"Съёмка", l_settings:"Настройки",
  desc_tush:"Классическая тушь: распускается и медленно оседает.", desc_silk:"Тонкие вьющиеся нити, почти не тонут.", desc_smoke:"Мягкая и лёгкая: поднимается вверх.",
  desc_oil:"Густое и тяжёлое: быстро падает, края резкие.", desc_water:"Бледные разливы, растекаются широко.", desc_dust:"Мелкие крупинки, закручиваются в вихри.",
@@ -316,7 +316,7 @@ let LANG=(()=>{const p=new URLSearchParams(location.search).get('lang');
 const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 </script>
 </head>
-<body class="lit">
+<body class="awake">
 <canvas id="c"></canvas>
 <div class="ui brand" id="brand">
   <div class="name"><span class="ttl" data-i18n="name"></span><span class="sub" data-i18n="tagline"></span></div>
@@ -618,9 +618,11 @@ function drop(x,y,size,t,silent){const c=inkColor(t+Math.random()*3).map(v=>v*(.
  queue.push({x,y,dx:(Math.random()-.5)*400,dy:(Math.random()-.5)*400,c,rad:size*S.rad});if(!silent)dripSound(x,y,Math.min(1,size/.008))}
 
 // ---------- pointer ----------
-let lastMove=-1e9,lastDrop=0,nextDrop=1500,tsec=0;
+// 5 секунд после любого явного действия интерфейс горит, дальше гаснет и кисть идёт сама
+const AWAKE_MS=5000;
+let lastActive=performance.now(),moveAcc=0,mvx=null,mvy=null,lastDrop=0,nextDrop=1500,tsec=0;
 function pos(e){return[e.clientX/innerWidth,e.clientY/innerHeight]}
-function wake(){lastMove=performance.now();document.body.classList.remove('idle');$('hint').classList.add('gone')}
+function wake(){lastActive=performance.now();moveAcc=0}
 const overUI=e=>e.target.closest&&e.target.closest('.ui,.cam,.recpill');
 addEventListener('contextmenu',e=>{if(!overUI(e))e.preventDefault()});
 const ptrs=new Map();
@@ -628,14 +630,19 @@ addEventListener('pointerdown',e=>{if(overUI(e))return;const[x,y]=pos(e);wake();
  if(openWhich){openSheet(null);return}
  if(e.button===2){nextInk();return}
  ptrs.set(e.pointerId,{x,y,down:true});drop(x,y,.006,tsec)});
-addEventListener('pointermove',e=>{const[x,y]=pos(e);wake();const p=ptrs.get(e.pointerId);
+addEventListener('pointermove',e=>{const[x,y]=pos(e);
+ // дрожание мыши не будит, будит заметное движение или наведение на панель
+ if(mvx!==null)moveAcc+=Math.hypot(e.clientX-mvx,e.clientY-mvy);mvx=e.clientX;mvy=e.clientY;
+ if(moveAcc>40||overUI(e))wake();
+ const p=ptrs.get(e.pointerId);
  if(overUI(e)){if(p){p.x=x;p.y=y}return}
  // мышь рисует и без нажатия, палец — только касаясь
  if(!p){if(e.pointerType==='mouse')ptrs.set(e.pointerId,{x,y,down:false});return}
  const dx=(x-p.x)*6000,dy=-(y-p.y)*6000;stroke(x,y,dx,dy,p.down,tsec);swish(Math.hypot(dx,dy)*(p.down?1.6:1),x,y);p.x=x;p.y=y});
 const pointerUp=e=>{const p=ptrs.get(e.pointerId);if(!p)return;if(e.pointerType==='mouse')p.down=false;else ptrs.delete(e.pointerId)};
 addEventListener('pointerup',pointerUp);addEventListener('pointercancel',pointerUp);
-document.addEventListener('mouseleave',()=>{lastMove=performance.now()-3500});
+document.addEventListener('mouseleave',()=>{lastActive=performance.now()-AWAKE_MS;mvx=mvy=null});
+addEventListener('wheel',wake,{passive:true});
 
 // ---------- autopilot brush ----------
 const ap={x:.5,y:.5,seed:Math.random()*100,init:false};
@@ -689,11 +696,10 @@ function setSound(v){ensureAudio();on=v;master.gain.setTargetAtTime(on?S.vol:0,a
 $('dSound').onclick=()=>{setSound(!on);toast(T(on?'t_sound_on':'t_sound_off'))};
 // один раз за всё время предлагаем включить звук
 const SEEN='inkfall-sound-seen';
-function hideInvite(){$('invite').classList.remove('on');setTimeout(()=>{$('invite').hidden=true},1300);try{localStorage.setItem(SEEN,'1')}catch(e){}}
+function hideInvite(){$('invite').classList.remove('on');document.body.classList.remove('inviting');setTimeout(()=>{$('invite').hidden=true},1300);try{localStorage.setItem(SEEN,'1')}catch(e){}}
 $('invite').onclick=()=>{setSound(true);hideInvite();toast(T('t_sound_on'))};
 let sndSeen=true;try{sndSeen=!!localStorage.getItem(SEEN)}catch(e){}
-if(!sndSeen&&!bare)setTimeout(()=>{if(on)return;$('invite').hidden=false;requestAnimationFrame(()=>$('invite').classList.add('on'));
- $('hint').classList.add('gone');setTimeout(()=>{if(!on)hideInvite()},22000)},9000);
+if(!sndSeen&&!bare)setTimeout(()=>{if(on)return;$('invite').hidden=false;document.body.classList.add('inviting');requestAnimationFrame(()=>$('invite').classList.add('on'));setTimeout(()=>{if(!on)hideInvite()},22000)},9000);
 
 // ---------- listening: microphone or system audio ----------
 let listen=null,micBase={low:0,high:0,all:0},lastLow=0,lastHigh=0;
@@ -835,11 +841,11 @@ $('dHands').onclick=startHands;$('camClose').onclick=stopHands;
 $('dMic').onclick=()=>{const was=listen&&$('mic').classList.contains('on');$('mic').onclick();if(was)toast(T('t_mic_off'))};
 
 // ---------- sheets ----------
-let openWhich=null,litUntil=performance.now()+5500;
+let openWhich=null;
 function openSheet(which){openWhich=which;
  $('sheet').hidden=which!=='sheet';$('capPop').hidden=which!=='cap';
  $('dSettings').classList.toggle('open',which==='sheet');$('dCapture').classList.toggle('open',which==='cap');
- if(which)wake();if(!which)litUntil=Math.max(litUntil,performance.now()+1200)}
+ wake()}
 $('dSettings').onclick=()=>openSheet(openWhich==='sheet'?null:'sheet');
 $('dCapture').onclick=()=>{if(rec){stopRec();return}openSheet(openWhich==='cap'?null:'cap')};
 
@@ -861,7 +867,7 @@ $('dColour').onclick=nextInk;
 if(!document.documentElement.requestFullscreen)$('fs').style.display='none';
 $('fs').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{})};
 $('langBtn').onclick=()=>{LANG=LANG==='ru'?'en':'ru';try{localStorage.setItem('inkfall-lang',LANG)}catch(e){}applyLang()};
-addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'||e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key.toLowerCase();
+addEventListener('keydown',e=>{wake();if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'||e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key.toLowerCase();
  if(k==='c')calm();else if(k==='t')$('dTheme').click();else if(k==='s')$('dSound').click();else if(k==='h')startHands();
  else if(k==='f')$('fs').click();else if(k==='x')shuffleLook();else if(k==='m')$('dMic').click();else if(k==='r'){rec?stopRec():startRec()}else if(k==='p')pauseRec();
  else if(e.key==='Escape')openSheet(null)});
@@ -872,7 +878,13 @@ CHIPS.forEach(k=>{const b=document.createElement('button');b.dataset.look=k;b.da
 function markChips(){[...$('chips').children].forEach(b=>b.classList.toggle('cur',b.dataset.look===S.preset));
  $('lookDesc').textContent=T(PRESETS[S.preset]?'desc_'+S.preset:'desc_custom')}
 function applyPreset(k){Object.assign(S,PRESETS[k]);S.preset=k;syncUI();save();toast(T('o_'+k)+' · '+T('desc_'+k));demoLook()}
-function shuffleLook(){const ks=Object.keys(PRESETS).filter(k=>k!==S.preset);applyPreset(ks[Math.floor(Math.random()*ks.length)])}
+function shuffleLook(){wake();
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ const k=pick(Object.keys(PRESETS).filter(x=>x!==S.preset)),ci=pick([0,1,2,3,4,5].filter(i=>i!==S.ink));
+ clearUntil=performance.now()+800;
+ Object.assign(S,PRESETS[k]);S.preset=k;S.ink=ci;syncUI();paint();save();
+ toast(T('o_'+k)+' · '+inkName(ci)+' · '+T('desc_'+k));
+ setTimeout(demoLook,850)}
 $('dRandom').onclick=shuffleLook;
 $('mTheme').onclick=()=>$('dTheme').click();$('mMic').onclick=()=>{openSheet(null);$('dMic').click()};$('mHands').onclick=()=>$('dHands').click();
 // сразу показываем характер на свежей капле и мазке, иначе разницу не заметить
@@ -969,15 +981,14 @@ function step(dt){let u;const clr=clearUntil>performance.now();
  u=use('clear',vel.tx,vel.ty);gl.uniform1i(u.uTexture,pres.read.bind(0));gl.uniform1f(u.value,.8);blit(pres.write);pres.swap();
  u=use('press',vel.tx,vel.ty);gl.uniform1i(u.uDivergence,div.bind(0));for(let i=0,n=weak?14:22;i<n;i++){gl.uniform1i(u.uPressure,pres.read.bind(1));blit(pres.write);pres.swap()}
  u=use('grad',vel.tx,vel.ty);gl.uniform1i(u.uPressure,pres.read.bind(0));gl.uniform1i(u.uVelocity,vel.read.bind(1));blit(vel.write);vel.swap();
- u=use('advect',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,vel.read.bind(0));gl.uniform2f(u.srcTexel,vel.tx,vel.ty);gl.uniform1f(u.diffuse,0);gl.uniform1f(u.fiber,0);gl.uniform1f(u.dt,dt);gl.uniform1f(u.dissipation,clr?1/(1+dt*7):1/(1+dt*.35));blit(vel.write);vel.swap();
- gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,dye.read.bind(1));gl.uniform2f(u.srcTexel,dye.tx,dye.ty);gl.uniform1f(u.diffuse,Math.min(.5,dt*S.diff*9));gl.uniform1f(u.fiber,S.fiber);gl.uniform1f(u.ntime,tsec);gl.uniform1f(u.dissipation,clr?1/(1+dt*7):1/(1+dt*.08));blit(dye.write);dye.swap()}
+ u=use('advect',vel.tx,vel.ty);gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,vel.read.bind(0));gl.uniform2f(u.srcTexel,vel.tx,vel.ty);gl.uniform1f(u.diffuse,0);gl.uniform1f(u.fiber,0);gl.uniform1f(u.dt,dt);gl.uniform1f(u.dissipation,clr?1/(1+dt*9/S.speed):1/(1+dt*.35));blit(vel.write);vel.swap();
+ gl.uniform1i(u.uVelocity,vel.read.bind(0));gl.uniform1i(u.uSource,dye.read.bind(1));gl.uniform2f(u.srcTexel,dye.tx,dye.ty);gl.uniform1f(u.diffuse,Math.min(.5,dt*S.diff*9));gl.uniform1f(u.fiber,S.fiber);gl.uniform1f(u.ntime,tsec);gl.uniform1f(u.dissipation,clr?1/(1+dt*9/S.speed):1/(1+dt*.08));blit(dye.write);dye.swap()}
 document.addEventListener('visibilitychange',()=>{if(!ac)return;master.gain.setTargetAtTime(document.hidden?0:(on?S.vol:0),ac.currentTime,.25)});
 let lastDot='';
 function frame(now){const real=Math.min((now-last)/1000,1/30);last=now;tsec=now/1000;const dt=real*S.speed;
- const idle=now-lastMove>3200&&!openWhich;document.body.classList.toggle('idle',idle);
- document.body.classList.toggle('lit',now<litUntil||openWhich==='sheet');
- if(S.auto==='always'||(S.auto==='idle'&&idle))autopilot(tsec,real);else ap.init=false;
- if(S.drops==='on'&&!reduced&&idle&&now-lastDrop>nextDrop){lastDrop=now;nextDrop=2200+Math.random()*3500;drop(.15+Math.random()*.7,.15+Math.random()*.7,.003+Math.random()*.004,tsec)}
+ const awake=now-lastActive<AWAKE_MS||!!openWhich;document.body.classList.toggle('awake',awake);
+ if(S.auto==='always'||(S.auto==='idle'&&!awake))autopilot(tsec,real);else ap.init=false;
+ if(S.drops==='on'&&!reduced&&!awake&&now-lastDrop>nextDrop){lastDrop=now;nextDrop=2200+Math.random()*3500;drop(.15+Math.random()*.7,.15+Math.random()*.7,.003+Math.random()*.004,tsec)}
  micTick(now);
  while(queue.length){const s=queue.shift();splat(s.x,s.y,s.dx,s.dy,s.c,s.rad)}
  step(dt);soundTick(real);tune(now,real);

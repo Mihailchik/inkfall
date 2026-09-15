@@ -27,15 +27,16 @@ back, and the edge of every bloom darkens the way wet sumi does.
 | Release ink | move; hold to paint thicker | |
 | Drop a bead | click or tap | |
 | Next colour | right-click, or **Colour** | |
-| Random character | **Random** | X |
+| Clean water, new character and colour | **Random** | X |
 | Clear the water | **Clear** | C |
 | Light or dark | **Theme** | T |
 | Sound, microphone | **Sound**, **Mic** | S, M |
 | Hand control | **Hands** | H |
 | Photo, video | **Capture** | R to record, P to pause |
 
-Several fingers paint several lines at once. Leave the scene alone and the brush
-keeps painting by itself.
+Several fingers paint several lines at once. For five seconds after any click, key
+or noticeable movement the title, the dock and the hint stay lit; then they fade
+together and the brush keeps painting by itself until you act again.
 
 ### Six characters
 
