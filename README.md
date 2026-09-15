@@ -78,6 +78,17 @@ opens it again, and `?tour` forces it.
 
 The theme follows the system until it is switched by hand, and the choice is remembered from then on.
 
+### On phones
+
+The welcome window uses a compact layout and, if it still does not fit, hides its secondary lines
+step by step instead of scrolling. The interface slides away while a finger is painting and comes
+back a moment after it lifts.
+
+Safari on iPhone hides its toolbar only when a page scrolls, and a drawing surface has to keep the
+swipes for itself, so a page cannot collapse that bar or go full screen. Inkfall is installable
+instead: **Share → Add to Home Screen** launches it full screen, without Safari's bars. The welcome
+window says so on iPhone.
+
 ### Microphone
 
 With the microphone on, sound takes over the brush. The autopilot and the random drops stop; the
