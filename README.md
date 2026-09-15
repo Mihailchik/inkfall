@@ -113,6 +113,15 @@ Then open `http://localhost:8777`.
 | `?bare=1` | hide the interface, for screenshots and embedding |
 | `?seed=7` | repeatable randomness |
 
+## Tests
+
+Gesture recognition is checked without a camera, on synthetic hands fed to the
+classifier taken straight from `index.html`:
+
+```bash
+node tests/gestures.test.mjs
+```
+
 ## Deploying
 
 The repository root is the publish directory; any static host works.
