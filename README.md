@@ -69,6 +69,12 @@ Press **Hands**, allow the camera, and hold one hand up.
 
 The camera image is processed on your device and never uploaded.
 
+First-time visitors are shown that this exists before they find the button. While the brush paints
+on its own, a translucent hand skeleton rides it and pinches whenever ink flows, using the same 21
+points and the same pinch the camera recognises. When the opening lights go out, a one-time invite
+offers to try it, only on devices that have a camera and not on phones, and the Hands button pulses.
+The camera is never requested until the visitor asks. Add `?tour` to see the hints again.
+
 ### Capture
 
 **Photo** saves a PNG. **Record video** shows a bar with a timer, pause and

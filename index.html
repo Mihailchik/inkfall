@@ -194,22 +194,33 @@ details.more summary::-webkit-details-marker{display:none}
  background:conic-gradient(var(--accent) calc(var(--p,0)*360deg),color-mix(in srgb,var(--accent) 22%,transparent) 0);
  -webkit-mask:radial-gradient(circle,transparent 13px,#000 14px);mask:radial-gradient(circle,transparent 13px,#000 14px)}
 
-.invite{left:28px;bottom:26px;font:300 12px/1 'Jost',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
- background:var(--glass);border:1px solid var(--accent);border-radius:999px;padding:11px 16px;cursor:pointer;opacity:0;transition:opacity 1.2s,background .3s,color .3s}
-.invite.on{opacity:1}
-.invite:hover,.invite:focus-visible{background:var(--accent);color:var(--on-accent);outline:none}
-.bare .ui,.bare .tip,.bare .cam,.bare .recpill{display:none!important}
+.invite{left:28px;bottom:26px;display:flex;align-items:center;gap:12px;padding:6px 6px 6px 16px;border-radius:999px;
+ background:var(--glass-strong);border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:var(--shadow);
+ opacity:0;transform:translateY(8px);transition:opacity .8s ease,transform .8s ease}
+.invite.on{opacity:1;transform:none}
+.invite .it{display:flex;flex-direction:column;gap:3px;font-size:13.5px;color:var(--ink);line-height:1.15}
+.invite .it small{font-size:11.5px;color:var(--mute)}
+.invite .ig{border:0;border-radius:999px;padding:9px 16px;background:var(--accent);color:var(--on-accent);font-size:13px;cursor:pointer;white-space:nowrap}
+.invite .ig:hover,.invite .ig:focus-visible{filter:brightness(1.08);outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
+.invite .ix{width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--mute);cursor:pointer;font-size:17px;line-height:1}
+.invite .ix:hover{color:var(--ink);background:var(--faint)}
+/* призрачная рука показывает жест, пока кисть рисует сама */
+.ghost{position:fixed;z-index:1;left:0;top:0;width:300px;height:320px;pointer-events:none;opacity:0;transition:opacity 1s ease;will-change:transform}
+.ghost.on{opacity:1}
+#dHands.pulse{animation:handPulse 1.6s ease-out 3}
+@keyframes handPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+.bare .ui,.bare .ghost,.bare .tip,.bare .cam,.bare .recpill{display:none!important}
 .err{position:fixed;inset:0;display:none;place-items:center;text-align:center;color:var(--mute);padding:40px}
 @media (max-width:600px){
  .name{font-size:26px}.hint{display:none}
  .dock{right:50%;transform:translateX(50%);bottom:12px;padding:4px}.dock button{width:56px;height:52px;gap:5px}.dock .lbl{font-size:9.5px}#dTheme,#dMic,#dHands,.dock .sep{display:none}
  .mobile-only{display:flex!important}
- .invite{left:50%;bottom:84px;transform:translateX(-50%);white-space:nowrap}
+ .invite{left:10px;right:10px;bottom:84px}.invite .it{flex:1}
  .sheet,.pop{right:10px;left:10px;width:auto;bottom:82px}
  .cam{width:150px;left:10px;bottom:86px}.legend,.private{display:none}
  .toast{bottom:88px}
 }
-@media (prefers-reduced-motion:reduce){.brand{animation:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
+@media (prefers-reduced-motion:reduce){.brand{animation:none}#dHands.pulse{animation:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Inkfall","applicationCategory":"MultimediaApplication","browserRequirements":"WebGL2","operatingSystem":"Any","inLanguage":["en","ru"],"author":{"@type":"Organization","name":"voidstudio","url":"https://voidstudio.top"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"A GPU fluid simulation in your browser. Move the pointer, or your hands in front of the camera, and ink blooms through water."}
@@ -224,7 +235,8 @@ const DICT={
 en:{
  name:"Inkfall", tagline:"slow fluid dynamics", credit:"by voidstudio.top",
  hint:"Move the pointer to release ink. Click to drop a bead, right-click to change colour.",
- invite:"♪ turn on the water",
+ inv_hands:"✋ Paint with your hands", inv_hands_sub:"the camera stays on your device", inv_try:"Try it",
+ inv_sound:"♪ The sound of water", inv_sound_sub:"quiet, synthesized live", inv_on:"Turn on", inv_close:"not now",
  d_colour:"next colour (right-click)", d_clear:"clear the water (C)", d_theme:"light or dark (T)", d_sound:"sound (S)",
  d_hands:"control with your hands (H)", d_capture:"photo or video (R)", d_settings:"settings",
  l_random:"Random", l_mic:"Mic", d_random:"clean water, new character and colour (X)", d_mic:"microphone (M)", t_today:"Now: %s", t_mic_off:"microphone off",
@@ -268,7 +280,8 @@ en:{
 ru:{
  name:"Inkfall", tagline:"медленная гидродинамика", credit:"сделано в voidstudio.top",
  hint:"Веди мышью, чтобы пустить тушь. Клик роняет каплю, правая кнопка меняет цвет.",
- invite:"♪ включить звук воды",
+ inv_hands:"✋ Рисуй руками", inv_hands_sub:"камера остаётся на твоём устройстве", inv_try:"Попробовать",
+ inv_sound:"♪ Звук воды", inv_sound_sub:"тихий, синтезируется на лету", inv_on:"Включить", inv_close:"не сейчас",
  d_colour:"следующий цвет (правая кнопка)", d_clear:"очистить воду (C)", d_theme:"светлая или тёмная (T)", d_sound:"звук (S)",
  d_hands:"управление руками (H)", d_capture:"фото или видео (R)", d_settings:"настройки",
  l_random:"Случайно", l_mic:"Микрофон", d_random:"чистая вода, новый характер и цвет (X)", d_mic:"микрофон (M)", t_today:"Сейчас: %s", t_mic_off:"микрофон выключен",
@@ -318,13 +331,14 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 </head>
 <body class="awake">
 <canvas id="c"></canvas>
+<canvas class="ghost" id="ghost" aria-hidden="true"></canvas>
 <div class="ui brand" id="brand">
   <div class="name"><span class="ttl" data-i18n="name"></span><span class="sub" data-i18n="tagline"></span></div>
   <a class="credit" href="https://voidstudio.top" target="_blank" rel="noopener"><img src="assets/voidstudio-cat.png" alt=""><span data-i18n="credit"></span></a>
 </div>
 <div class="ui hint" id="hint" data-i18n="hint"></div>
 <div class="ui toast" id="toast" role="status" aria-live="polite"></div>
-<button class="ui invite" id="invite" hidden data-i18n="invite"></button>
+<div class="ui invite" id="invite" role="dialog" hidden><span class="it"><b id="invTitle"></b><small id="invSub"></small></span><button class="ig" id="invGo"></button><button class="ix" id="invX" data-i18n-title="inv_close">×</button></div>
 
 <nav class="ui fade dock" id="dock">
   <button id="dColour" data-i18n-title="d_colour"><span class="dot" id="dot"></span><span class="lbl" data-i18n="l_colour"></span></button>
@@ -646,8 +660,40 @@ addEventListener('wheel',wake,{passive:true});
 
 // ---------- autopilot brush ----------
 const ap={x:.5,y:.5,seed:Math.random()*100,init:false};
-function autopilot(t,dt){const s=ap.seed;const x=.5+.34*Math.sin(t*.17+s)+.11*Math.sin(t*.43+s*2.1),y=.5+.3*Math.cos(t*.21+s*3)+.1*Math.sin(t*.57+s);
- if(ap.init){const dx=(x-ap.x)*6000,dy=-(y-ap.y)*6000;stroke(x,y,dx*.9,dy*.9,false,t,Math.min(.5,Math.hypot(dx,dy)/120));swish(Math.hypot(dx,dy)*.5,x,y)}ap.x=x;ap.y=y;ap.init=true}
+function autopilot(t,dt,demo){const s=ap.seed;const x=.5+.34*Math.sin(t*.17+s)+.11*Math.sin(t*.43+s*2.1),y=.5+.3*Math.cos(t*.21+s*3)+.1*Math.sin(t*.57+s);
+ if(ap.init){const dx=(x-ap.x)*6000,dy=-(y-ap.y)*6000,sp=Math.hypot(dx,dy);
+  // с призрачной рукой тушь идёт только при сжатых пальцах — ровно как в настоящем режиме
+  if(!demo){stroke(x,y,dx*.9,dy*.9,false,t,Math.min(.5,sp/120));swish(sp*.5,x,y)}
+  else if(demo.paint){stroke(x,y,dx*.9,dy*.9,false,t,.95);swish(sp,x,y)}}
+ ap.x=x;ap.y=y;ap.init=true}
+// Призрачная рука: те же 21 точка, что отдаёт камера. Две позы, между ними — щипок.
+const GH_OPEN=[[.50,.90],[.43,.84],[.37,.77],[.33,.70],[.30,.63],[.42,.62],[.40,.52],[.39,.45],[.38,.39],[.49,.60],[.49,.49],[.49,.42],[.49,.35],[.56,.62],[.575,.52],[.585,.46],[.59,.40],[.62,.66],[.65,.585],[.665,.535],[.68,.49]];
+const GH_PINCH=GH_OPEN.map(p=>p.slice());
+[[2,.38,.76],[3,.35,.68],[4,.345,.565],[6,.395,.535],[7,.36,.51],[8,.345,.55],[12,.495,.34],[16,.60,.395],[20,.70,.485]].forEach(([i,x,y])=>{GH_PINCH[i]=[x,y]});
+const ghost={el:null,cx:null,on:false,clock:0,left:45000,last:-1,theme:''};
+function ghostPinch(c){const u=c%3.6;return u<.45?u/.45:u<2.55?1:u<3?1-(u-2.55)/.45:0}
+function drawGhost(t){const g=ghost;if(!g.cx){g.el=$('ghost');g.cx=g.el.getContext('2d')}
+ const d=Math.min(2,devicePixelRatio||1),W=300,H=320;if(g.el.width!==W*d){g.el.width=W*d;g.el.height=H*d}
+ const c=g.cx;c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,W,H);
+ const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+ const P=GH_OPEN.map((p,i)=>[p[0]+(GH_PINCH[i][0]-p[0])*e,p[1]+(GH_PINCH[i][1]-p[1])*e]);
+ const ax=(P[4][0]+P[8][0])/2,ay=(P[4][1]+P[8][1])/2,A=-.18,ca=Math.cos(A),sa=Math.sin(A),K=360;
+ const tr=p=>{const dx=(p[0]-ax)*K,dy=(p[1]-ay)*K;return[90+dx*ca-dy*sa,92+dx*sa+dy*ca]};
+ const light=THEME==='light',rgb=light?'30,29,35':'255,255,255';
+ c.lineCap=c.lineJoin='round';
+ const path=()=>{c.beginPath();HAND_LINKS.forEach(([a,b])=>{const p=tr(P[a]),q=tr(P[b]);c.moveTo(p[0],p[1]);c.lineTo(q[0],q[1])})};
+ path();c.strokeStyle=`rgba(${rgb},.09)`;c.lineWidth=20;c.stroke();
+ path();c.strokeStyle=`rgba(${rgb},.6)`;c.lineWidth=2.2;c.stroke();
+ P.forEach((p,i)=>{const q=tr(p);c.beginPath();c.arc(q[0],q[1],i===4||i===8?4.6:2.4,0,7);
+  c.fillStyle=(i===4||i===8)&&e>.8?getComputedStyle(document.documentElement).getPropertyValue('--accent'):`rgba(${rgb},.8)`;c.fill()})}
+function ghostTick(active,real){const g=ghost;
+ if(active){g.left-=real*1000;g.clock+=real}
+ if(active!==g.on){g.on=active;$('ghost').classList.toggle('on',active);if(active)g.last=-1}
+ if(!active)return null;
+ const pinch=ghostPinch(g.clock);
+ if(Math.abs(pinch-g.last)>.01||g.theme!==THEME){g.last=pinch;g.theme=THEME;drawGhost(pinch)}
+ $('ghost').style.transform=`translate(${ap.x*innerWidth-90}px,${ap.y*innerHeight-92}px)`;
+ return{paint:pinch>.85}}
 
 // ---------- sound ----------
 let ac=null,on=false,master,bus,swishGain,swishFilter,swishPan,swishLevel=0,swishPos=[.5,.5],lastBubble=0;
@@ -694,12 +740,29 @@ function ensureAudio(){if(!ac)initAudio();if(ac.state==='suspended')ac.resume()}
 function setSound(v){ensureAudio();on=v;master.gain.setTargetAtTime(on?S.vol:0,ac.currentTime,.6);$('dSound').classList.toggle('on',on);$('dSound').setAttribute('aria-pressed',on)}
 
 $('dSound').onclick=()=>{setSound(!on);toast(T(on?'t_sound_on':'t_sound_off'))};
-// один раз за всё время предлагаем включить звук
-const SEEN='inkfall-sound-seen';
-function hideInvite(){$('invite').classList.remove('on');document.body.classList.remove('inviting');setTimeout(()=>{$('invite').hidden=true},1300);try{localStorage.setItem(SEEN,'1')}catch(e){}}
-$('invite').onclick=()=>{setSound(true);hideInvite();toast(T('t_sound_on'))};
-let sndSeen=true;try{sndSeen=!!localStorage.getItem(SEEN)}catch(e){}
-if(!sndSeen&&!bare)setTimeout(()=>{if(on)return;$('invite').hidden=false;document.body.classList.add('inviting');requestAnimationFrame(()=>$('invite').classList.add('on'));setTimeout(()=>{if(!on)hideInvite()},22000)},9000);
+// приглашения по очереди: сначала руки (если есть камера и это не телефон), потом звук. Каждое — один раз.
+const TOUR=QP.has('tour');
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=k=>{try{localStorage.setItem(k,'1')}catch(e){}};
+let handsUsed=!TOUR&&!!lsGet('inkfall-hands-used'),invQueue=[],invKind=null,invTimer=0;
+async function hasCamera(){try{return(await navigator.mediaDevices.enumerateDevices()).some(d=>d.kind==='videoinput')}catch(e){return false}}
+function openInvite(kind){
+ if(kind==='hands'&&(hands||handsUsed)||kind==='sound'&&on){lsSet('inkfall-'+kind+'-seen');nextInvite(0);return}
+ invKind=kind;$('invTitle').textContent=T('inv_'+kind);$('invSub').textContent=T('inv_'+kind+'_sub');
+ $('invGo').textContent=T(kind==='hands'?'inv_try':'inv_on');
+ $('invite').hidden=false;document.body.classList.add('inviting');requestAnimationFrame(()=>$('invite').classList.add('on'));
+ if(kind==='hands')pulseHands();
+ clearTimeout(invTimer);invTimer=setTimeout(()=>hideInvite(),22000)}
+function hideInvite(){if(!invKind)return;lsSet('inkfall-'+invKind+'-seen');invKind=null;clearTimeout(invTimer);
+ $('invite').classList.remove('on');document.body.classList.remove('inviting');setTimeout(()=>{if(!invKind)$('invite').hidden=true},900);nextInvite(15000)}
+function nextInvite(delay){const k=invQueue.shift();if(k)setTimeout(()=>openInvite(k),delay)}
+$('invGo').onclick=()=>{const k=invKind;hideInvite();if(k==='hands')startHands();else{setSound(true);toast(T('t_sound_on'))}};
+$('invX').onclick=hideInvite;
+function pulseHands(){const b=$('dHands');b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse')}
+$('dHands').addEventListener('animationend',()=>$('dHands').classList.remove('pulse'));
+(async()=>{if(bare)return;
+ if(!coarse&&(TOUR||!lsGet('inkfall-hands-seen'))&&!handsUsed&&await hasCamera()){invQueue.push('hands');setTimeout(pulseHands,1400)}
+ if(TOUR||!lsGet('inkfall-sound-seen'))invQueue.push('sound');
+ nextInvite(AWAKE_MS+700)})();
 
 // ---------- listening: microphone or system audio ----------
 let listen=null,micBase={low:0,high:0,all:0},lastLow=0,lastHigh=0;
@@ -787,7 +850,7 @@ async function startHands(){
   try{H.lm=await vision.HandLandmarker.createFromOptions(files,opts('GPU'))}
   catch(e){H.lm=await vision.HandLandmarker.createFromOptions(files,opts('CPU'))}
   if(H.stopped){H.lm.close();return}
-  camStatus('h_show');loopHands(H);
+  camStatus('h_show');loopHands(H);handsUsed=true;lsSet('inkfall-hands-used');if(invKind==='hands')hideInvite();
  }catch(e){console.warn('hands:',e);if(!H.stopped)camStatus(handErr(e))}}
 function loopHands(H){const v=H.video;
  const tick=()=>{if(H.stopped)return;
@@ -987,7 +1050,9 @@ document.addEventListener('visibilitychange',()=>{if(!ac)return;master.gain.setT
 let lastDot='';
 function frame(now){const real=Math.min((now-last)/1000,1/30);last=now;tsec=now/1000;const dt=real*S.speed;
  const awake=now-lastActive<AWAKE_MS||!!openWhich;document.body.classList.toggle('awake',awake);
- if(S.auto==='always'||(S.auto==='idle'&&!awake))autopilot(tsec,real);else ap.init=false;
+ const piloting=S.auto==='always'||(S.auto==='idle'&&!awake);
+ const demo=ghostTick(piloting&&!awake&&!handsUsed&&!coarse&&!bare&&ghost.left>0,real);
+ if(piloting)autopilot(tsec,real,demo);else ap.init=false;
  if(S.drops==='on'&&!reduced&&!awake&&now-lastDrop>nextDrop){lastDrop=now;nextDrop=2200+Math.random()*3500;drop(.15+Math.random()*.7,.15+Math.random()*.7,.003+Math.random()*.004,tsec)}
  micTick(now);
  while(queue.length){const s=queue.shift();splat(s.x,s.y,s.dx,s.dy,s.c,s.rad)}
