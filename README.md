@@ -84,10 +84,10 @@ The welcome window uses a compact layout and, if it still does not fit, hides it
 step by step instead of scrolling. The interface slides away while a finger is painting and comes
 back a moment after it lifts.
 
-Safari on iPhone hides its toolbar only when a page scrolls, and a drawing surface has to keep the
-swipes for itself, so a page cannot collapse that bar or go full screen. Inkfall is installable
-instead: **Share → Add to Home Screen** launches it full screen, without Safari's bars. The welcome
-window says so on iPhone.
+Safari on iPhone collapses its toolbar only when the page is scrolled by the visitor. The drawing surface
+keeps swipes for itself, so on iPhone the page is allowed to scroll a little and a swipe up on the
+welcome window, the title or the dock collapses the bar; the welcome window says so until it happens.
+For true full screen, **Share → Add to Home Screen** launches Inkfall without Safari at all.
 
 ### Microphone
 

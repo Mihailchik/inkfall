@@ -62,6 +62,10 @@
 :root[data-theme="light"]{color-scheme:light}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0;background:var(--bg);overflow:hidden}
+/* в Safari на айфоне даём странице чуть прокрутиться: свайп вверх сворачивает панель браузера.
+   Холст свайпы не отдаёт, прокручивают окно приветствия, название и панель действий */
+html.ios-bar,html.ios-bar body{height:auto;overflow-x:hidden;overflow-y:auto}
+html.ios-bar body{min-height:calc(100lvh + 72px)}
 body{color:var(--ink);font:300 14px/1.5 'Jost',system-ui,sans-serif;cursor:crosshair;-webkit-font-smoothing:antialiased}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
@@ -75,6 +79,7 @@ body.awake .brand,body.awake .dock,body.awake .hint{opacity:1;transition:opacity
 .brand::before{content:"";position:absolute;left:-70px;top:-60px;right:-110px;bottom:-50px;z-index:-1;pointer-events:none;
  background:radial-gradient(closest-side,color-mix(in srgb,var(--bg) 82%,transparent),transparent);opacity:0;transition:opacity 1.2s}
 body.awake .brand::before{opacity:1}
+body.welcoming .brand{opacity:0!important;transition:opacity .3s}
 .name{font:600 34px/1 'Fraunces',Georgia,serif;letter-spacing:.005em;text-shadow:var(--halo)}
 .name .ttl{display:block;transition:text-shadow 1.2s}
 body.awake .name .ttl{text-shadow:var(--halo),0 0 30px color-mix(in srgb,var(--accent) 55%,transparent)}
@@ -213,8 +218,9 @@ details.more summary::-webkit-details-marker{display:none}
 .welcome{position:fixed;inset:0;z-index:5;display:grid;place-items:start center;padding:max(20px,min(9vh,84px)) 20px 20px;cursor:default;
  background:color-mix(in srgb,var(--bg) 45%,transparent);opacity:0;transition:opacity .45s ease}
 .welcome.on{opacity:1}
-.wcard{width:min(520px,100%);max-height:calc(100dvh - max(40px,min(9vh,84px)) - 20px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent;background:var(--card);border:1px solid var(--line);
- border-radius:22px;box-shadow:var(--shadow);padding:22px 22px 18px;transform:translateY(12px);transition:transform .45s ease}
+.wcard{width:min(520px,100%);max-height:calc(100dvh - max(40px,min(9vh,84px)) - 20px);display:flex;flex-direction:column;overflow:hidden;background:var(--card);border:1px solid var(--line);
+ border-radius:22px;box-shadow:var(--shadow);transform:translateY(12px);transition:transform .45s ease}
+.wbody{flex:1 1 auto;min-height:0;overflow-y:auto;padding:22px 22px 16px;scrollbar-width:thin;scrollbar-color:var(--line) transparent;overscroll-behavior:contain}
 .welcome.on .wcard{transform:none}
 .whead{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
 .whead .wname{grid-area:1/1}
@@ -243,7 +249,7 @@ details.more summary::-webkit-details-marker{display:none}
 .wtip{margin:14px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink);opacity:.85}
 .wpriv{color:var(--mute)}
 .wios{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--faint);font-size:12.5px;line-height:1.4;color:var(--ink)}
-.wbottom{position:sticky;bottom:-18px;margin:14px -22px -18px;padding:12px 22px 14px;background:var(--card);border-top:1px solid var(--line)}
+.wbottom{flex:none;padding:12px 22px 14px;background:var(--card);border-top:1px solid var(--line)}
 .wfoot{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .chk{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;color:var(--mute);cursor:pointer}
 .chk input{width:16px;height:16px;margin:0;accent-color:var(--accent);cursor:pointer}
@@ -260,7 +266,8 @@ details.more summary::-webkit-details-marker{display:none}
  .cam{width:150px;left:10px;bottom:calc(86px + env(safe-area-inset-bottom))}.legend,.private{display:none}
  .toast{bottom:88px}
  .welcome{padding:calc(10px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom))}
- .wcard{max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:14px 14px 10px;border-radius:18px}
+ .wcard{max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));border-radius:18px}
+ .wbody{padding:14px 14px 10px}
  .wname{font-size:24px}.wtag{margin-top:6px;font-size:12.5px}
  .wlist{margin-top:8px}
  /* иконка, название и кнопка в одной строке, описание — на всю ширину под ними */
@@ -271,10 +278,10 @@ details.more summary::-webkit-details-marker{display:none}
  .wlist p{grid-area:d;margin:0}
  .wact{grid-area:b;min-width:0;padding:7px 13px}
  .wtip{margin-top:10px;font-size:12px}
- .wbottom{bottom:-10px;margin:10px -14px -10px;padding:10px 14px}
+ .wbottom{padding:10px 14px}
  .wgo{min-width:0;padding:10px 20px}.chk{font-size:12px}
- .wcard.tight .wtip [data-i18n="w_tip"]{display:none}
- .wcard.tighter .whead .wtag,.wcard.tighter .wlist li:first-child p,.wcard.tighter .wlist li:last-child p{display:none}
+ .wbody.tight .wtip [data-i18n="w_tip"]{display:none}
+ .wbody.tighter .whead .wtag,.wbody.tighter .wlist li:first-child p,.wbody.tighter .wlist li:last-child p{display:none}
 }
 @media (prefers-reduced-motion:reduce){.brand{animation:none}.welcome,.wcard{transition:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
 </style>
@@ -301,7 +308,7 @@ en:{
  w_snd:"Water sounds", w_snd_t:"Soft gurgles and drops that follow your brush.", w_snd_b:"Turn on", w_snd_on:"Sound on",
  w_tip:"Random, in the bar below, picks a mode and a colour for you.",
  w_priv:"Camera and mic work right in your browser; nothing is sent anywhere.",
- w_ios:"To hide Safari’s bars, tap Share, then Add to Home Screen. Inkfall will open full screen, like an app.",
+ w_ios:"Swipe this window up to hide Safari’s bar. For true full screen: Share, then Add to Home Screen.",
  w_hide:"Don’t show at start", w_go:"Start",
  l_random:"Random", l_mic:"Mic", d_random:"clean water, new mode and colour (X)", d_mic:"microphone (M)", t_today:"Now: %s", t_mic_off:"microphone off",
  l_colour:"Colour", l_clear:"Clear", l_theme:"Theme", l_sound:"Sound", l_hands:"Hands", l_capture:"Capture", l_settings:"Settings",
@@ -354,7 +361,7 @@ ru:{
  w_snd:"Звук воды", w_snd_t:"Тихое журчание и капли в такт кисти.", w_snd_b:"Включить", w_snd_on:"Звук вкл",
  w_tip:"Кнопка «Случайно» внизу сама подберёт режим и цвет.",
  w_priv:"Камера и микрофон работают прямо в браузере, ничего никуда не отправляется.",
- w_ios:"Чтобы убрать панели Safari, нажми «Поделиться», затем «На экран „Домой“». Inkfall будет открываться на весь экран, как приложение.",
+ w_ios:"Смахни это окно вверх, и панель Safari спрячется. Совсем на весь экран: «Поделиться» → «На экран „Домой“».",
  w_hide:"Не показывать при запуске", w_go:"Начать",
  l_random:"Случайно", l_mic:"Микрофон", d_random:"чистая вода, новый режим и цвет (X)", d_mic:"микрофон (M)", t_today:"Сейчас: %s", t_mic_off:"микрофон выключен",
  l_colour:"Цвет", l_clear:"Очистить", l_theme:"Тема", l_sound:"Звук", l_hands:"Руки", l_capture:"Съёмка", l_settings:"Настройки",
@@ -488,6 +495,7 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
 <div class="tip" id="tip0" hidden></div><div class="tip" id="tip1" hidden></div>
 <div class="welcome" id="welcome" hidden>
   <div class="wcard" id="wCard" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+   <div class="wbody" id="wBody">
     <div class="whead">
       <div class="wname" id="wTitle">Inkfall</div>
       <div class="wtag" data-i18n="w_tag"></div>
@@ -504,6 +512,7 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
     </ul>
     <p class="wtip"><span data-i18n="w_tip"></span> <span class="wpriv" data-i18n="w_priv"></span></p>
     <p class="wios" id="wIos" hidden data-i18n="w_ios"></p>
+   </div>
     <div class="wbottom">
       <div class="wfoot">
         <label class="chk"><input type="checkbox" id="wHide"><span data-i18n="w_hide"></span></label>
@@ -1017,7 +1026,7 @@ function welcomeTick(){const now=performance.now();if(!wHover)wLeft=Math.max(0,w
  renderWelcome();if(wLeft<=0)closeWelcome()}
 // Каждый текст окна меряется на обоих языках, и под него резервируется высота длинного варианта.
 // Иначе при смене языка строки меняют высоту, и кнопки прыгают.
-function lockWelcomeHeights(){if(!welcomeOpen)return;$('wCard').classList.remove('tight','tighter');
+function lockWelcomeHeights(){if(!welcomeOpen)return;$('wBody').classList.remove('tight','tighter');
  const els=[...$('wCard').querySelectorAll('.wtag,.wlist p,.wtip')];
  const nodes=el=>el.dataset.i18n?[el]:[...el.querySelectorAll('[data-i18n]')];
  const hs=els.map(el=>{el.style.minHeight='';return 0});
@@ -1027,27 +1036,27 @@ function lockWelcomeHeights(){if(!welcomeOpen)return;$('wCard').classList.remove
  els.forEach((el,i)=>{nodes(el).forEach(n=>{n.textContent=T(n.dataset.i18n)});el.style.minHeight=hs[i]+'px'});
  fitWelcome()}
 // прокрутки быть не должно: сначала прячем подсказку про «Случайно», потом описания простых строк
-function fitWelcome(){const c=$('wCard'),over=()=>c.scrollHeight>c.clientHeight+1;
+function fitWelcome(){const c=$('wBody'),over=()=>c.scrollHeight>c.clientHeight+1;
  if(over())c.classList.add('tight');if(over())c.classList.add('tighter')}
 addEventListener('resize',lockWelcomeHeights);
 if(window.visualViewport)visualViewport.addEventListener('resize',lockWelcomeHeights);
 if(document.fonts)document.fonts.ready.then(lockWelcomeHeights);
 function openWelcome(){if(welcomeOpen)return;welcomeOpen=true;openSheet(null);
  wLeft=W_SECONDS;wLast=performance.now();wHover=false;
- $('wHide').checked=!!lsGet('inkfall-welcome-off');$('welcome').hidden=false;lockWelcomeHeights();
+ $('wHide').checked=!!lsGet('inkfall-welcome-off');$('welcome').hidden=false;document.body.classList.add('welcoming');lockWelcomeHeights();
  requestAnimationFrame(()=>$('welcome').classList.add('on'));renderWelcome();
  clearInterval(wTimer);wTimer=setInterval(welcomeTick,250);setTimeout(()=>$('wGo').focus({preventScroll:true}),60)}
 function closeWelcome(forTry){if(!welcomeOpen)return;welcomeOpen=false;clearInterval(wTimer);
  // пришли пробовать режим — его сообщение важнее подсказки про случайный режим
  if(forTry)pendingToast=null;
  try{if($('wHide').checked)localStorage.setItem('inkfall-welcome-off','1');else localStorage.removeItem('inkfall-welcome-off')}catch(e){}
- $('welcome').classList.remove('on');setTimeout(()=>{if(!welcomeOpen)$('welcome').hidden=true},460);wake();
+ $('welcome').classList.remove('on');document.body.classList.remove('welcoming');setTimeout(()=>{if(!welcomeOpen)$('welcome').hidden=true},460);wake();
  if(pendingToast){const m=pendingToast;pendingToast=null;setTimeout(()=>toast(m),500)}}
 $('wCard').addEventListener('pointerenter',()=>{wHover=true});
 $('wCard').addEventListener('pointerleave',()=>{wHover=false;wLast=performance.now()});
 $('wCard').addEventListener('pointerdown',()=>{wLeft=W_SECONDS});
 $('wGo').onclick=()=>closeWelcome();
-$('welcome').addEventListener('pointerdown',e=>{if(e.target===$('welcome'))closeWelcome()});
+$('welcome').addEventListener('click',e=>{if(e.target===$('welcome'))closeWelcome()});
 $('wSnd').onclick=()=>{setSound(!on);renderWelcome()};
 // «Попробовать»: окно уходит, браузер спрашивает микрофон, и звук сразу начинает рисовать
 $('wMic').onclick=()=>{const already=$('dMic').classList.contains('on');closeWelcome(true);
@@ -1061,7 +1070,11 @@ hasCamera().then(c=>{if(!c){$('wHandsRow').hidden=true;lockWelcomeHeights()}});
 // в Safari на айфоне панель браузера не спрятать из страницы; с экрана «Домой» сайт открывается без неё
 const isIOS=/iP(hone|od|ad)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 const installed=matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
-if(isIOS&&!installed)$('wIos').hidden=false;
+if(isIOS&&!installed){document.documentElement.classList.add('ios-bar');$('wIos').hidden=false;
+ // панель свернулась — видимая высота выросла; подсказка больше не нужна
+ const base=visualViewport?visualViewport.height:innerHeight;
+ const onVV=()=>{if((visualViewport?visualViewport.height:innerHeight)>base+30){$('wIos').hidden=true;lockWelcomeHeights()}};
+ if(window.visualViewport)visualViewport.addEventListener('resize',onVV);else addEventListener('resize',onVV)}
 $('mTheme').onclick=()=>$('dTheme').click();$('mMic').onclick=()=>{openSheet(null);$('dMic').click()};$('mHands').onclick=()=>$('dHands').click();
 // сразу показываем характер на свежей капле и мазке, иначе разницу не заметить
 function demoLook(){wake();drop(.5,.36,.009,tsec);
