@@ -213,17 +213,9 @@ details.more summary::-webkit-details-marker{display:none}
 .seg button.cur{background:var(--ink);color:var(--bg)}
 .seg.icon button{padding:5px 9px;display:grid;place-items:center}
 .seg svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.wh{font:400 10px/1 'Jost',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);margin:18px 0 2px}
-.wh+.wmodes{margin-top:10px}
-.wmodes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.wmodes button{text-align:left;border:1px solid var(--line);background:transparent;border-radius:12px;padding:9px 11px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:3px;transition:border-color .2s,background .2s}
-.wmodes b{font-weight:400;font-size:13.5px}
-.wmodes span{font-size:11.5px;line-height:1.3;color:var(--mute)}
-.wmodes button:hover,.wmodes button:focus-visible{border-color:var(--ink);outline:none}
-.wmodes button.cur{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
 .wbar{height:3px;margin:0 -22px;background:var(--line);overflow:hidden}
 .wbar i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(var(--k,1));transition:transform .25s linear}
-.wlist{list-style:none;margin:6px 0 0;padding:0}
+.wlist{list-style:none;margin:14px 0 0;padding:0}
 .wlist li{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:14px;padding:9px 0;border-top:1px solid var(--line)}
 .wlist li:first-child{border-top:0}
 .wi{width:40px;height:40px;border-radius:12px;background:var(--faint);display:grid;place-items:center;color:var(--ink)}
@@ -233,6 +225,8 @@ details.more summary::-webkit-details-marker{display:none}
 .wact{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:8px 14px;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .wact:hover,.wact:focus-visible{border-color:var(--ink);outline:none}
 .wact.on{border-color:var(--accent);color:var(--accent)}
+.wact.try:not(.on){background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.wact.try:not(.on):hover,.wact.try:not(.on):focus-visible{filter:brightness(1.15)}
 .wtip{margin:14px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink);opacity:.85}
 .wpriv{color:var(--mute)}
 .wbottom{position:sticky;bottom:-18px;margin:14px -22px -18px;padding:12px 22px 0;background:var(--card);border-top:1px solid var(--line)}
@@ -251,7 +245,7 @@ details.more summary::-webkit-details-marker{display:none}
  .sheet,.pop{right:10px;left:10px;width:auto;bottom:82px}
  .cam{width:150px;left:10px;bottom:86px}.legend,.private{display:none}
  .toast{bottom:88px}
- .wlist li{grid-template-columns:40px 1fr}.wact{grid-column:2;justify-self:start}.wname{font-size:26px}.wcard{padding:18px 16px 14px}.wmodes{grid-template-columns:1fr 1fr}.wbottom{bottom:-14px;margin:14px -16px -14px;padding:12px 16px 0}.wbar{margin:0 -16px}
+ .wlist li{grid-template-columns:40px 1fr}.wact{grid-column:2;justify-self:start}.wname{font-size:26px}.wcard{padding:18px 16px 14px}.wbottom{bottom:-14px;margin:14px -16px -14px;padding:12px 16px 0}.wbar{margin:0 -16px}
 }
 @media (prefers-reduced-motion:reduce){.brand{animation:none}.welcome,.wcard{transition:none}.recdot,#dCapture.rec svg circle:last-child{animation:none}}
 </style>
@@ -272,13 +266,10 @@ en:{
  d_hands:"control with your hands (H)", d_capture:"photo or video (R)", d_settings:"settings",
  l_help:"Help", d_help:"how to play (?)",
  w_tag:"Paint with ink on water: with the mouse, your hands or your voice",
- w_with:"Paint with",
  w_pt:"Mouse or finger", w_pt_t:"Draw across the screen. Click to drop ink, right-click for a new colour.",
- w_hands:"Your hands", w_hands_t:"Paint in the air: pinch your fingers to draw, open your palm to stir the water.", w_hands_b:"Turn on camera",
- w_mic:"Voice and music", w_mic_t:"Turn on the mic and sound paints by itself: silence keeps the brush still, louder brings more ink.", w_mic_b:"Turn on", w_mic_on:"Listening",
+ w_hands:"Hands", w_hands_t:"Paint in the air in front of the camera: pinch your fingers to draw, open your palm to stir.", w_hands_b:"Try it", w_hands_on:"On",
+ w_mic:"Voice and music", w_mic_t:"Sound leads the brush: it waits in silence, and the louder it gets, the more ink flows.", w_mic_b:"Try it", w_mic_on:"Listening",
  w_snd:"Water sounds", w_snd_t:"Soft gurgles and drops that follow your brush.", w_snd_b:"Turn on", w_snd_on:"Sound on",
- w_modes:"Modes",
- wm_tush:"blooms and settles", wm_silk:"fine curling threads", wm_smoke:"light, drifts upward", wm_oil:"thick, sinks fast", wm_water:"pale, spreads wide", wm_dust:"grains in whirls",
  w_tip:"Random, in the bar below, picks a mode and a colour for you.",
  w_priv:"Camera and mic work right in your browser; nothing is sent anywhere.",
  w_hide:"Don’t show at start", w_go:"Start",
@@ -327,13 +318,10 @@ ru:{
  d_hands:"управление руками (H)", d_capture:"фото или видео (R)", d_settings:"настройки",
  l_help:"Помощь", d_help:"как играть (?)",
  w_tag:"Рисуй тушью на воде: мышью, руками или голосом",
- w_with:"Чем рисовать",
  w_pt:"Мышь или палец", w_pt_t:"Проведи по экрану, и появится тушь. Клик ставит каплю, правый клик меняет цвет.",
- w_hands:"Руки", w_hands_t:"Рисуй в воздухе: сведи пальцы щепоткой, чтобы рисовать, раскрой ладонь, чтобы размешать воду.", w_hands_b:"Включить камеру",
- w_mic:"Голос и музыка", w_mic_t:"Включи микрофон, и звук рисует сам: в тишине кисть замирает, чем громче, тем больше туши.", w_mic_b:"Включить", w_mic_on:"Слушаю",
+ w_hands:"Руки", w_hands_t:"Рисуй в воздухе перед камерой: сведи пальцы щепоткой, чтобы рисовать, раскрой ладонь, чтобы размешать.", w_hands_b:"Попробовать", w_hands_on:"Включено",
+ w_mic:"Голос и музыка", w_mic_t:"Звук сам ведёт кисть: в тишине она ждёт, а чем громче, тем больше туши.", w_mic_b:"Попробовать", w_mic_on:"Слушаю",
  w_snd:"Звук воды", w_snd_t:"Тихое журчание и капли в такт кисти.", w_snd_b:"Включить", w_snd_on:"Звук вкл",
- w_modes:"Режимы",
- wm_tush:"распускается и оседает", wm_silk:"тонкие вьющиеся нити", wm_smoke:"лёгкий, поднимается вверх", wm_oil:"густое, быстро тонет", wm_water:"бледная, растекается", wm_dust:"крупинки в вихрях",
  w_tip:"Кнопка «Случайно» внизу сама подберёт режим и цвет.",
  w_priv:"Камера и микрофон работают прямо в браузере, ничего никуда не отправляется.",
  w_hide:"Не показывать при запуске", w_go:"Начать",
@@ -476,15 +464,12 @@ const T=k=>(DICT[LANG]&&DICT[LANG][k])||DICT.en[k]||k;
         <div class="seg" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
       </div>
     </div>
-    <h4 class="wh" data-i18n="w_with"></h4>
     <ul class="wlist">
       <li><span class="wi"><svg viewBox="0 0 24 24"><path d="M6 3.5l12 7-5.2 1.3L10 17z"/><path d="M13 12l4.5 6"/></svg></span><div><b data-i18n="w_pt"></b><p data-i18n="w_pt_t"></p></div></li>
-      <li id="wHandsRow"><span class="wi"><svg viewBox="0 0 24 24"><path d="M8 12.5V5.5a1.5 1.5 0 0 1 3 0V11M11 10.5V4a1.5 1.5 0 0 1 3 0v6.5M14 10.5V5.5a1.5 1.5 0 0 1 3 0V12M17 9a1.5 1.5 0 0 1 3 0v5.5a7 7 0 0 1-7 7h-.8a7 7 0 0 1-5.6-2.8l-2.3-3.1a1.6 1.6 0 0 1 2.4-2.1L8 15"/></svg></span><div><b data-i18n="w_hands"></b><p data-i18n="w_hands_t"></p></div><button class="wact" id="wHands" data-i18n="w_hands_b"></button></li>
-      <li><span class="wi"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></span><div><b data-i18n="w_mic"></b><p data-i18n="w_mic_t"></p></div><button class="wact" id="wMic"></button></li>
+      <li id="wHandsRow"><span class="wi"><svg viewBox="0 0 24 24"><path d="M8 12.5V5.5a1.5 1.5 0 0 1 3 0V11M11 10.5V4a1.5 1.5 0 0 1 3 0v6.5M14 10.5V5.5a1.5 1.5 0 0 1 3 0V12M17 9a1.5 1.5 0 0 1 3 0v5.5a7 7 0 0 1-7 7h-.8a7 7 0 0 1-5.6-2.8l-2.3-3.1a1.6 1.6 0 0 1 2.4-2.1L8 15"/></svg></span><div><b data-i18n="w_hands"></b><p data-i18n="w_hands_t"></p></div><button class="wact try" id="wHands"></button></li>
+      <li><span class="wi"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></span><div><b data-i18n="w_mic"></b><p data-i18n="w_mic_t"></p></div><button class="wact try" id="wMic"></button></li>
       <li><span class="wi"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></span><div><b data-i18n="w_snd"></b><p data-i18n="w_snd_t"></p></div><button class="wact" id="wSnd"></button></li>
     </ul>
-    <h4 class="wh" data-i18n="w_modes"></h4>
-    <div class="wmodes" id="wModes"></div>
     <p class="wtip"><span data-i18n="w_tip"></span> <span class="wpriv" data-i18n="w_priv"></span></p>
     <div class="wbottom">
       <div class="wfoot">
@@ -988,15 +973,12 @@ const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 async function hasCamera(){try{return(await navigator.mediaDevices.enumerateDevices()).some(d=>d.kind==='videoinput')}catch(e){return false}}
 let welcomeOpen=false,wTimer=0,pendingToast=null,wLeft=0,wLast=0,wHover=false;
 const W_SECONDS=30;
-Object.keys(PRESETS).forEach(k=>{const b=document.createElement('button');b.dataset.look=k;
- b.innerHTML=`<b data-i18n="o_${k}"></b><span data-i18n="wm_${k}"></span>`;
- b.onclick=()=>{applyPreset(k,true);renderWelcome()};$('wModes').appendChild(b)});
 function renderWelcome(){const micOn=$('dMic').classList.contains('on');
  $('wMic').textContent=T(micOn?'w_mic_on':'w_mic_b');$('wMic').classList.toggle('on',micOn);
+ $('wHands').textContent=T(hands?'w_hands_on':'w_hands_b');$('wHands').classList.toggle('on',!!hands);
  $('wSnd').textContent=T(on?'w_snd_on':'w_snd_b');$('wSnd').classList.toggle('on',on);
  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('cur',b.dataset.lang===LANG));
  document.querySelectorAll('[data-theme-set]').forEach(b=>b.classList.toggle('cur',b.dataset.themeSet===THEME));
- [...$('wModes').children].forEach(b=>b.classList.toggle('cur',b.dataset.look===S.preset));
  $('wGo').textContent=T('w_go')+' · '+Math.ceil(wLeft);$('wBar').style.setProperty('--k',(wLeft/W_SECONDS).toFixed(3))}
 // отсчёт идёт, пока окно не трогают; навёл мышь — пауза, нажал что-то внутри — отсчёт заново
 function welcomeTick(){const now=performance.now();if(!wHover)wLeft=Math.max(0,wLeft-(now-wLast)/1000);wLast=now;
@@ -1006,18 +988,22 @@ function openWelcome(){if(welcomeOpen)return;welcomeOpen=true;openSheet(null);
  $('wHide').checked=!!lsGet('inkfall-welcome-off');$('welcome').hidden=false;
  requestAnimationFrame(()=>$('welcome').classList.add('on'));renderWelcome();
  clearInterval(wTimer);wTimer=setInterval(welcomeTick,250);setTimeout(()=>$('wGo').focus({preventScroll:true}),60)}
-function closeWelcome(){if(!welcomeOpen)return;welcomeOpen=false;clearInterval(wTimer);
+function closeWelcome(forTry){if(!welcomeOpen)return;welcomeOpen=false;clearInterval(wTimer);
+ // пришли пробовать режим — его сообщение важнее подсказки про случайный режим
+ if(forTry)pendingToast=null;
  try{if($('wHide').checked)localStorage.setItem('inkfall-welcome-off','1');else localStorage.removeItem('inkfall-welcome-off')}catch(e){}
  $('welcome').classList.remove('on');setTimeout(()=>{if(!welcomeOpen)$('welcome').hidden=true},460);wake();
  if(pendingToast){const m=pendingToast;pendingToast=null;setTimeout(()=>toast(m),500)}}
 $('wCard').addEventListener('pointerenter',()=>{wHover=true});
 $('wCard').addEventListener('pointerleave',()=>{wHover=false;wLast=performance.now()});
 $('wCard').addEventListener('pointerdown',()=>{wLeft=W_SECONDS});
-$('wGo').onclick=closeWelcome;
+$('wGo').onclick=()=>closeWelcome();
 $('welcome').addEventListener('pointerdown',e=>{if(e.target===$('welcome'))closeWelcome()});
 $('wSnd').onclick=()=>{setSound(!on);renderWelcome()};
-$('wMic').onclick=()=>{$('dMic').click();setTimeout(renderWelcome,250)};
-$('wHands').onclick=()=>{closeWelcome();startHands()};
+// «Попробовать»: окно уходит, браузер спрашивает микрофон, и звук сразу начинает рисовать
+$('wMic').onclick=()=>{const already=$('dMic').classList.contains('on');closeWelcome(true);
+ if(already)return;ensureAudio();$('mic').onclick()};
+$('wHands').onclick=()=>{closeWelcome(true);if(!hands)startHands()};
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{LANG=b.dataset.lang;try{localStorage.setItem('inkfall-lang',LANG)}catch(e){}applyLang()});
 document.querySelectorAll('[data-theme-set]').forEach(b=>b.onclick=()=>setTheme(b.dataset.themeSet,true,true));
 $('dHelp').onclick=openWelcome;

@@ -70,9 +70,9 @@ Press **Hands**, allow the camera, and hold one hand up.
 
 The camera image is processed on your device and never uploaded.
 
-A welcome window at start shows what you can paint with (mouse or finger, hands, voice and music,
-water sounds) and turns each on in place, lists the six modes so one can be picked straight away, and
-switches theme and language. It closes by itself after 30 seconds; hovering pauses the countdown and
+A welcome window at start shows what you can paint with: mouse or finger, hands, voice and music, and
+water sounds. Hands and voice have a **Try it** button that closes the window, asks the browser for the
+camera or microphone and starts that mode at once. The window also switches theme and language. It closes by itself after 30 seconds; hovering pauses the countdown and
 any click inside restarts it. “Don’t show at start” is remembered; **Help** in the bar or the `?` key
 opens it again, and `?tour` forces it.
 
