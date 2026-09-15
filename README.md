@@ -27,7 +27,7 @@ back, and the edge of every bloom darkens the way wet sumi does.
 | Release ink | move; hold to paint thicker | |
 | Drop a bead | click or tap | |
 | Next colour | right-click, or **Colour** | |
-| Clean water, new character and colour | **Random** | X |
+| Clean water, new mode and colour | **Random** | X |
 | Clear the water | **Clear** | C |
 | Light or dark | **Theme** | T |
 | Sound, microphone | **Sound**, **Mic** | S, M |
@@ -39,12 +39,12 @@ Several fingers paint several lines at once. For five seconds after any click, k
 or noticeable movement the title, the dock and the hint stay lit; then they fade
 together and the brush keeps painting by itself until you act again.
 
-### Six characters
+### Six modes
 
 Each one changes several physical parameters at once, and switching drops a
 fresh bloom so the difference shows immediately.
 
-| Character | Behaviour |
+| Mode | Behaviour |
 | --- | --- |
 | Ink | blooms, then slowly sinks |
 | Silk | fine curling threads that barely sink |
@@ -70,9 +70,19 @@ Press **Hands**, allow the camera, and hold one hand up.
 
 The camera image is processed on your device and never uploaded.
 
-A welcome window at start explains the ways to play and turns on the camera, microphone or sound in
-place, with a language switch at the top. Ticking “Don’t show at start” is remembered; **Help** in the
-bar or the `?` key opens it again, and `?tour` forces it.
+A welcome window at start shows what you can paint with (mouse or finger, hands, voice and music,
+water sounds) and turns each on in place, lists the six modes so one can be picked straight away, and
+switches theme and language. It closes by itself after 30 seconds; hovering pauses the countdown and
+any click inside restarts it. “Don’t show at start” is remembered; **Help** in the bar or the `?` key
+opens it again, and `?tour` forces it.
+
+The theme follows the system until it is switched by hand, and the choice is remembered from then on.
+
+### Microphone
+
+With the microphone on, sound takes over the brush. The autopilot and the random drops stop; the
+brush stands still in silence, moves faster and lays more ink as it gets louder, low hits drop heavy
+beads and high sounds scatter fine ripples. System audio from a tab works the same way.
 
 ### Capture
 
